@@ -8,7 +8,10 @@ import {
   OneToOne,
   JoinColumn,
   OneToMany,
+  BeforeUpdate,
+  BeforeInsert,
 } from "typeorm";
+import { hashSync } from "bcryptjs";
 import { Address } from "./address.entity";
 import { Comments } from "./comments.entity";
 import { Orders } from "./orders.entity";
@@ -25,6 +28,9 @@ export class User {
   email: string;
 
   @Column()
+  password: string;
+
+  @Column()
   age: number;
 
   @CreateDateColumn()
@@ -38,6 +44,12 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @BeforeUpdate()
+  @BeforeInsert()
+  hashPassword() {
+    this.password = hashSync(this.password, 10);
+  }
 
   @OneToOne(() => Address)
   @JoinColumn()
