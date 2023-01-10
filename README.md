@@ -205,7 +205,7 @@ ________________________________________________________________________________
   "description": string,
   "price": number,
   "amount": number,
-  "avaible": boolean
+  "available": boolean
 }
 
 ````
