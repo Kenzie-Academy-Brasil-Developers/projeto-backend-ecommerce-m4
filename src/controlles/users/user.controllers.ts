@@ -1,21 +1,35 @@
+import { instanceToPlain } from "class-transformer"
 import { Request, Response } from "express";
+import createUserService from "../../services/users/createUser.service";
+import deleteUserService from "../../services/users/deleteUser.service";
+import listAllUsersService from "../../services/users/listAllUsers.service";
+import listUserIDService from "../../services/users/listUser.service";
+import upadateUserService from "../../services/users/updateUserservice";
 
-export const createUserController = (req: Request, res: Response) => {
-  return res.status(200).json({});
+
+
+export const createUserController =async (req: Request, res: Response) => {
+  const user = await createUserService(req.body)
+  return res.status(201).json(instanceToPlain(user));
 };
 
-export const updateUserController = (req: Request, res: Response) => {
-  return res.status(200).json({});
+export const updateUserController =async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const user = await upadateUserService(id,req.body)
+  return res.status(200).json(instanceToPlain(user));
 };
 
-export const deleteUserController = (req: Request, res: Response) => {
-  return res.status(200).json({});
+export const deleteUserController = async(req: Request, res: Response) => {
+  await deleteUserService(req.params.id)
+  return res.status(200).json();
 };
 
-export const getAllUsersController = (req: Request, res: Response) => {
-  return res.status(200).json({});
+export const getAllUsersController =async (req: Request, res: Response) => {
+  const users = await listAllUsersService()
+  return res.status(200).json(instanceToPlain(users));
 };
 
-export const getUserByIdController = (req: Request, res: Response) => {
-  return res.status(200).json({});
+export const getUserByIdController = async(req: Request, res: Response) => {
+  const user = await listUserIDService(req.params.id)
+  return res.status(200).json(instanceToPlain(user));
 };

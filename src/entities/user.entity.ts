@@ -15,6 +15,7 @@ import { hashSync } from "bcryptjs";
 import { Address } from "./address.entity";
 import { Comments } from "./comments.entity";
 import { Orders } from "./orders.entity";
+import { Exclude } from "class-transformer";
 
 @Entity("users")
 export class User {
@@ -28,6 +29,7 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column()
@@ -40,9 +42,11 @@ export class User {
   updatedAt: Date;
 
   @Column({ default: false })
+  @Exclude()
   isAdm: boolean;
 
   @DeleteDateColumn()
+  @Exclude()
   deletedAt: Date;
 
   @BeforeUpdate()
