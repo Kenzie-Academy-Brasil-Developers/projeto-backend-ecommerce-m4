@@ -11,15 +11,15 @@
 **Request:**
 ````
 {
-	"email": string,
-	"password": string
+  "email": string,
+  "password": string
 }
 ````
 
 **Response:**
 ````
 {
-	token: string
+  "token": string
 }
 ````
 
@@ -35,16 +35,16 @@ ________________________________________________________________________________
 **Request:**
 ````
 {
-	"name": string,
-	"age": number,
-	"email": string,
-	"address": {
-			"street": string,
-			"city": string,
-			"zipCode": string,
-			"state": string,
-			"number": string
-	}
+  "name": string,
+  "age": number,
+  "email": string,
+  "address": {
+    "street": string,
+    "city": string,
+    "zipCode": string,
+    "state": string,
+     "number": string
+  }
 }
 
 ````
@@ -52,21 +52,21 @@ ________________________________________________________________________________
 **Response:**
 ````
 {
-	"name": string,
-	"age": number,
-	"email": string,
+  "name": string,
+  "age": number,
+  "email": string,
   "isAdm": boolean,
   "createdAt": Date,
   "updatedAt": Date,
   "deletedAt": Date,
-	"address": {
-			"street": string,
-			"city": string,
-			"zipCode": string,
-			"state": string,
-			"number": string
-	}
-}
+    "address": {
+	"street": string,
+	"city": string,
+	"zipCode": string,
+	"state": string,
+	"number": string
+     }
+  }
 
 ````
 _______________________________________________________________________________________________________________________________________________________________________
@@ -110,20 +110,20 @@ ________________________________________________________________________________
 ````
 {
   "id": string,
-	"name": string,
-	"age": number,
-	"email": string,
+  "name": string,
+  "age": number,
+  "email": string,
   "isAdm": boolean,
   "createdAt": Date,
   "updatedAt": Date,
   "deletedAt": Date,
-	"address": {
-			"street": string,
-			"city": string,
-			"zipCode": string,
-			"state": string,
-			"number": string
-	}
+  "address": {
+    "street": string,
+    "city": string,
+    "zipCode": string,
+    "state": string,
+    "number": string
+   }
 }
 ´´´´
 
@@ -136,9 +136,9 @@ ________________________________________________________________________________
 **Request:**
 ````
 {
-	"name"?: string,
-	"age"?: number,
-	"email"?: string
+  "name"?: string,
+  "age"?: number,
+  "email"?: string
 }
 
 ````
@@ -147,20 +147,20 @@ ________________________________________________________________________________
 ````
 {
   "id": string,
-	"name": string,
-	"age": number,
-	"email": string,
+  "name": string,
+  "age": number,
+   "email": string,
   "isAdm": boolean,
   "createdAt": Date,
   "updatedAt": Date,
   "deletedAt": Date,
-	"address": {
-			"street": string,
-			"city": string,
-			"zipCode": string,
-			"state": string,
-			"number": string
-	}
+  "address": {
+    "street": string,
+    "city": string,
+    "zipCode": string,
+    "state": string,
+    "number": string
+  }
 }
 ´´´´
 _______________________________________________________________________________________________________________________________________________________________________
@@ -170,11 +170,11 @@ ________________________________________________________________________________
 **Request:**
 ````
 {
-    "street"?: string,
-    "city"?: string,
-    "zipCode"?: string,
-    "state"?: string,
-    "number"?: string
+  "street"?: string,
+  "city"?: string,
+  "zipCode"?: string,
+  "state"?: string,
+  "number"?: string
 }
 
 ````
@@ -182,12 +182,12 @@ ________________________________________________________________________________
 **Response:**
 ````
 "address": {
-    "id": number,
-    "street": string,
-    "city": string,
-    "zipCode": string,
-    "state": string,
-    "number": string
+  "id": number,
+  "street": string,
+  "city": string,
+  "zipCode": string,
+  "state": string,
+  "number": string
 }
 
 ````
@@ -204,11 +204,11 @@ ________________________________________________________________________________
 **Request:**
 ````
 {
-	"name": string,
-	"description": string,
-	"price": number,
-	"amount": number,
-	"avaible": boolean
+  "name": string,
+  "description": string,
+  "price": number,
+  "amount": number,
+  "avaible": boolean
 }
 
 ````
@@ -217,11 +217,11 @@ ________________________________________________________________________________
 ````
 {
   "id": number,
-	"name": string,
-	"description": string,
-	"price": number,
-	"amount": number,
-	"available": boolean
+  "name": string,
+  "description": string,
+  "price": number,
+  "amount": number,
+  "available": boolean
 }
 
 ````
@@ -237,11 +237,11 @@ ________________________________________________________________________________
 ````
 {
   "id": number,
-	"name": string,
-	"description": string,
-	"price": number,
-	"amount": number,
-	"available": boolean
+  "name": string,
+  "description": string,
+  "price": number,
+  "amount": number,
+  "available": boolean
 }
 ````
 
@@ -254,11 +254,11 @@ ________________________________________________________________________________
 **Request:**
 ````
 {
-	"name": string,
-	"description": string,
-	"price": number,
-	"amount": number,
-	"avaible": boolean
+  "name": string,
+  "description": string,
+  "price": number,
+  "amount": number,
+  "avaible": boolean
 }
 
 ````
@@ -267,11 +267,11 @@ ________________________________________________________________________________
 ````
 {
   "id": number,
-	"name": string,
-	"description": string,
-	"price": number,
-	"amount": number,
-	"available": boolean
+  "name": string,
+  "description": string,
+  "price": number,
+  "amount": number,
+  "available": boolean
 }
 
 ````
@@ -292,7 +292,7 @@ ________________________________________________________________________________
 **Request:**
 ````
 {
-	"comment_text": string
+  "comment_text": string
 }
 
 ````
@@ -338,7 +338,7 @@ ________________________________________________________________________________
 **Request:**
 ````
 {
-	"comment_text": string
+  "comment_text": string
 }
 
 ````
@@ -386,7 +386,7 @@ ________________________________________________________________________________
 **Request:**
 ````
 {
-	"delivered": boolean
+  "delivered": boolean
 }
 ````
 
