@@ -26,6 +26,7 @@ export const authTokenMiddleware = (
 
       req.user = {
         id: decoded.sub as string,
+        isAdm: decoded.isAdm,
       };
 
       return next();

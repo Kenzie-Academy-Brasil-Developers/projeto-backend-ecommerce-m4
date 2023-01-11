@@ -1,6 +1,7 @@
 import AppDataSource from "../../data-source";
 import { Address } from "../../entities/address.entity";
 import { User } from "../../entities/user.entity";
+import { AppError } from "../../errors/errors";
 
 export interface IAdress {
   id: number;
@@ -34,6 +35,12 @@ const createUserService = async ({
 }: IDataUser): Promise<IDataUser> => {
   const userRepository = AppDataSource.getRepository(User);
   const addressRepository = AppDataSource.getRepository(Address);
+
+  const findUser = await userRepository.findOneBy({ email: dataUser.email });
+
+  if (findUser) {
+    throw new AppError("Email already exists", 409);
+  }
 
   const newAddress: IAdress = addressRepository.create(address as IAdress);
   await addressRepository.save(newAddress);
