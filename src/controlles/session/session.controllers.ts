@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { sessionService } from "../../services/session/session.service";
 
-export const sessionController = (req: Request, res: Response) => {
-  const session = sessionService(req.body);
+export const sessionController = async (req: Request, res: Response) => {
+  const session = await sessionService(req.body);
 
   return res.status(200).json(session);
 };
