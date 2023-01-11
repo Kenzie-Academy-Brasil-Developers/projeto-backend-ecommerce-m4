@@ -19,7 +19,19 @@ export interface IDataUser {
   address: IAdress;
 }
 
-const createUserService = async ({ address, ...dataUser }: IDataUser) => {
+export interface IDataUserResponse {
+  id: string;
+  name: string;
+  age: number;
+  password: string;
+  email: string;
+  address: IAdress;
+}
+
+const createUserService = async ({
+  address,
+  ...dataUser
+}: IDataUser): Promise<IDataUser> => {
   const userRepository = AppDataSource.getRepository(User);
   const addressRepository = AppDataSource.getRepository(Address);
 
