@@ -13,11 +13,11 @@ export const authTokenMiddleware = (
     res.status(401).json({ message: "Missing authorization headers" });
   }
 
-  const token = authToken?.split(" ")[1];
+  const token = authToken.split(" ")[1];
 
   jwt.verify(
     token as string,
-    process.env.SECRET_KEY as string,
+    process.env.SECRETKEY as string,
     (error: Error, decoded: any) => {
       if (error) {
         return res.status(401).json({
