@@ -2,7 +2,14 @@ import AppDataSource from "../../data-source";
 import { User } from "../../entities/user.entity";
 import { AppError } from "../../errors/errors";
 
-const upadateUserService = async (userId, dataUser) => {
+export interface IUpdateUser {
+  name: string;
+  age: number;
+  password: string;
+  email: string;
+}
+
+const upadateUserService = async (userId: string, dataUser: IUpdateUser) => {
   const userRepository = AppDataSource.getRepository(User);
   const user = await userRepository.findOneBy({ id: userId });
   if (!user) {

@@ -1,7 +1,8 @@
 import AppDataSource from "../../data-source";
 import { Address } from "../../entities/address.entity";
 import { User } from "../../entities/user.entity";
-interface IAdress {
+
+export interface IAdress {
   id: number;
   city: string;
   state: string;
@@ -10,7 +11,15 @@ interface IAdress {
   number: string;
 }
 
-const createUserService = async ({ address, ...dataUser }) => {
+export interface IDataUser {
+  name: string;
+  age: number;
+  password: string;
+  email: string;
+  address: IAdress;
+}
+
+const createUserService = async ({ address, ...dataUser }: IDataUser) => {
   const userRepository = AppDataSource.getRepository(User);
   const addressRepository = AppDataSource.getRepository(Address);
 
