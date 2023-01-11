@@ -6,11 +6,38 @@ import {
   getUserByIdController,
   updateUserController,
 } from "../controlles/users/user.controllers";
+import { authTokenMiddleware } from "../middleweres/authToken.middlewere";
+import { isAdmMiddlewere } from "../middleweres/isAdm.Middlewere";
+import { userExistsMiddlewere } from "../middleweres/userExists.middlewere";
+import { validateUserPermissionsMiddlewere } from "../middleweres/validateUserPermissions.middlewere";
 
 export const UserRouter = Router();
 
 UserRouter.post("", createUserController);
-UserRouter.get("", getAllUsersController);
-UserRouter.get("/:id", getUserByIdController);
-UserRouter.patch("/:id", updateUserController);
-UserRouter.delete("/:id", deleteUserController);
+
+UserRouter.get("", authTokenMiddleware, isAdmMiddlewere, getAllUsersController);
+
+UserRouter.get(
+  "/:id",
+  authTokenMiddleware,
+  userExistsMiddlewere,
+  validateUserPermissionsMiddlewere,
+  getUserByIdController
+);
+
+UserRouter.patch(
+  "/:id",
+  authTokenMiddleware,
+  isAdmMiddlewere,
+  userExistsMiddlewere,
+  validateUserPermissionsMiddlewere,
+  updateUserController
+);
+
+UserRouter.delete(
+  "/:id",
+  authTokenMiddleware,
+  userExistsMiddlewere,
+  validateUserPermissionsMiddlewere,
+  deleteUserController
+);

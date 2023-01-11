@@ -6,30 +6,24 @@ import listCommentsByIdServices from "../../services/comments/listCommentsById.s
 
 export const createCommentsController = async (req: Request, res: Response) => {
   const id: number = parseInt(req.params.id);
-  const newComments = await createCommentsServices(id, req.body);
+  const newComments = await createCommentsServices(id, req.body, req.user.id);
   return res.status(200).json(newComments);
 };
 
 export const updateCommentsController = async (req: Request, res: Response) => {
-  const id = req.params.id;
-  const idComment = parseInt(req.params.idComment);
-  const dataComment = req.body.comments_text;
+  const idComment = parseInt(req.params.id);
 
-  const updatedComment = await updatedCommentsServices(
-    id,
-    idComment,
-    dataComment
-  );
+  const updatedComment = await updatedCommentsServices(idComment, req.body);
 
   return res.status(200).json(updatedComment);
 };
 
 export const deleteCommentsController = async (req: Request, res: Response) => {
-  const idComment = parseInt(req.params.idComment);
+  const idComment = parseInt(req.params.id);
 
   await deleteCommentsService(idComment);
 
-  return res.status(200).json({});
+  return res.status(200).json();
 };
 
 export const getCommentsByIdProductController = async (

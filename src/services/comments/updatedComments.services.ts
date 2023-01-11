@@ -3,9 +3,8 @@ import { Comments } from "../../entities/comments.entity";
 import { IComments } from "./createComments.services";
 
 const updatedCommentsServices = async (
-  idProduct,
   idComment: number,
-  dataComment: string
+  { comment_text }
 ): Promise<IComments> => {
   const commentRepository = AppDataSource.getRepository(Comments);
 
@@ -15,10 +14,12 @@ const updatedCommentsServices = async (
 
   await commentRepository.update(idComment, {
     ...comment,
-    comments_text: dataComment,
+    comments_text: comment_text,
   });
 
-  return comment;
+  const commentUpdated = await commentRepository.findOneBy({ id: idComment });
+
+  return commentUpdated;
 };
 
 export default updatedCommentsServices;

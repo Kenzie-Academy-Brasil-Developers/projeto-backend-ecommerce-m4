@@ -6,6 +6,7 @@ import productRouter from "./router/product.routes";
 import { commentsRouter } from "./router/comments.router";
 import { errorHandler } from "./errors/errors";
 import { addressRouter } from "./router/address.router";
+import sessionRouter from "./router/session.routes";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use("/users", UserRouter);
 app.use("/products", commentsRouter);
 app.use("/users", addressRouter);
 app.use("/products", productRouter);
+app.use("/session", sessionRouter);
 
 app.use(errorHandler);
 

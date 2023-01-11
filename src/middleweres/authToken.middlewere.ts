@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import "dotenv/config";
 
 export const authTokenMiddleware = (
   req: Request,
@@ -16,8 +17,8 @@ export const authTokenMiddleware = (
 
   jwt.verify(
     token as string,
-    process.env.SECRET_KEY as string,
-    (error, decoded: any) => {
+    process.env.SECRETKEY as string,
+    (error: Error, decoded: any) => {
       if (error) {
         return res.status(401).json({
           message: error.message,
@@ -26,6 +27,7 @@ export const authTokenMiddleware = (
 
       req.user = {
         id: decoded.sub as string,
+        isAdm: decoded.isAdm,
       };
 
       return next();
