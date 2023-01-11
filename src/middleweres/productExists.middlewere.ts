@@ -7,7 +7,7 @@ export const productExistsMiddlewere = async (
   res: Response,
   next: NextFunction
 ) => {
-  const productId = +req.params.id;
+  const productId = Number(req.params.id)
 
   const productsRepository = AppDataSource.getRepository(Products);
 
@@ -18,4 +18,5 @@ export const productExistsMiddlewere = async (
   }
 
   next();
+  
 };
