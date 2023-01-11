@@ -29,7 +29,7 @@ const mockedAdminRequest = {
 
 const mockedUserRequest2 = {
   name: "Gabriel Magalhães",
-  email: "user2@mail.com",
+  email: "pikachu@mail.com",
   password: "1234",
   address: {
     city: "Belo Horizonte",

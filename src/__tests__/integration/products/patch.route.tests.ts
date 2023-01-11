@@ -1,4 +1,3 @@
-
 import {
   AppDataSource,
   DataSource,
@@ -34,10 +33,8 @@ describe("/products", () => {
   });
 
   beforeEach(async () => {
-    const usersData = await userRepository.find();
-    await userRepository.remove(usersData);
-    const productsData = await productRepository.find();
-    await productRepository.remove(productsData);
+    await userRepository.createQueryBuilder().delete().execute();
+    await productRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {

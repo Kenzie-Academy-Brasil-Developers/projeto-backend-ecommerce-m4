@@ -31,8 +31,7 @@ describe("/users", () => {
   });
 
   beforeEach(async () => {
-    const usersData = await userRepository.find();
-    await userRepository.remove(usersData);
+    await userRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {

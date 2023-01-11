@@ -5,13 +5,12 @@ import {
   app,
   request,
   mockedInvalidIdNumber,
-  mockedProductRequest
+  mockedProductRequest,
 } from "../index";
 
 describe("/products", () => {
   let connection: DataSource;
   const baseUrl = "/products";
-  /* const userRepository = AppDataSource.getRepository(User); */
   const productRepository = AppDataSource.getRepository(Products);
 
   beforeAll(async () => {
@@ -25,10 +24,7 @@ describe("/products", () => {
   });
 
   beforeEach(async () => {
-    /* const usersData = await userRepository.find();
-    await userRepository.remove(usersData); */
-    const productsData = await productRepository.find();
-    await productRepository.remove(productsData);
+    await productRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -51,19 +47,20 @@ describe("/products", () => {
   it("GET /products/:id - should be able to list specific product", async () => {
     const product = productRepository.create(mockedProductRequest);
     await productRepository.save(product);
-    
+
     const response = await request(app).get(`${baseUrl}/${product.id}`);
-    
+
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("name");
     expect(response.body).toHaveProperty("price");
     expect(response.body).toHaveProperty("amount");
-
   });
-  it("GET /products/:id - should not be able to list specific product with invalid Id", async () => { 
-    const response = await request(app).get(`${baseUrl}/${mockedInvalidIdNumber}`);
-    
+  it("GET /products/:id - should not be able to list specific product with invalid Id", async () => {
+    const response = await request(app).get(
+      `${baseUrl}/${mockedInvalidIdNumber}`
+    );
+
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("message");
   });
