@@ -1,8 +1,7 @@
 const mockedUserRequest = {
   name: "Lucas Garcia",
-  email: "lucas@mail.com",
+  email: "user@mail.com",
   password: "1234",
-  isAdm: false,
   address: {
     city: "Rio de Janeiro",
     state: "RJ",
@@ -15,7 +14,7 @@ const mockedUserRequest = {
 
 const mockedAdminRequest = {
   name: "Lucas Garcia",
-  email: "lucas@mail.com",
+  email: "admin@mail.com",
   password: "1234",
   isAdm: true,
   address: {
@@ -72,7 +71,7 @@ const mockedAdminLogin = {
 };
 
 const mockedUserLogin = {
-  email: "lucas@mail.com",
+  email: "user@mail.com",
   password: "1234",
 };
 
@@ -88,6 +87,13 @@ const mockedUserUpdate = {
   name: "Gilberto Faria",
   age: 99,
 };
+
+const mockedUserUpdate2 = {
+  name: "Garcia Magalhães",
+  age: 14,
+};
+
+const mockedInvalidId = "4a1f1b51-eb60-4b1f-8356-59c4ccf24bf4";
 export {
   mockedUserRequest,
   mockedUserResponse,
@@ -98,4 +104,6 @@ export {
   mockedUserUpdate,
   mockedUserRequest2,
   mockedAdminRequest,
+  mockedInvalidId,
+  mockedUserUpdate2,
 };
