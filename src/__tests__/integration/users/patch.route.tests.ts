@@ -138,8 +138,8 @@ describe("/users", () => {
       .set("Authorization", userToken)
       .send(mockedUserUpdate);
 
-    expect(response.body.name).toEqual(mockedUserUpdate.name);
-    expect(response.body.age).toEqual(mockedUserUpdate.age);
+    expect(response.body.name).toBe(mockedUserUpdate.name);
+    expect(response.body.age).toBe(mockedUserUpdate.age);
     expect(response.status).toBe(200);
   });
 
@@ -156,17 +156,11 @@ describe("/users", () => {
       .set("Authorization", userToken)
       .send(mockedUserAddressUpdate);
 
-    expect(response.body.address.city).toEqual(mockedUserAddressUpdate.city);
-    expect(response.body.address.state).toEqual(mockedUserAddressUpdate.state);
-    expect(response.body.address.street).toEqual(
-      mockedUserAddressUpdate.street
-    );
-    expect(response.body.address.number).toEqual(
-      mockedUserAddressUpdate.number
-    );
-    expect(response.body.address.zipCode).toEqual(
-      mockedUserAddressUpdate.zipCode
-    );
+    expect(response.body.address.city).toBe(mockedUserAddressUpdate.city);
+    expect(response.body.address.state).toBe(mockedUserAddressUpdate.state);
+    expect(response.body.address.street).toBe(mockedUserAddressUpdate.street);
+    expect(response.body.address.number).toBe(mockedUserAddressUpdate.number);
+    expect(response.body.address.zipCode).toBe(mockedUserAddressUpdate.zipCode);
     expect(response.status).toBe(200);
   });
 });
