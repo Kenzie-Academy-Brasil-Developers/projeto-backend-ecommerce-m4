@@ -22,6 +22,5 @@ productRouter.delete('/:id',
     deleteProductController
 )
 
-
-
 export default productRouter
+
