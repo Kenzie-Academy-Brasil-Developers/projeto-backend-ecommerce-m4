@@ -1,20 +1,44 @@
 import { Request, Response } from "express";
+import createCommentsServices from "../../services/comments/createComments.services";
+import updatedCommentsServices from "../../services/comments/updatedComments.services";
+import deleteCommentsService from "../../services/comments/deleteComments.services";
+import listCommentsByIdServices from "../../services/comments/listCommentsById.services";
 
-export const createCommentsController = (req: Request, res: Response) => {
+export const createCommentsController = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const newComments = await createCommentsServices(id, req.body);
+  return res.status(200).json(newComments);
+};
+
+export const updateCommentsController = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const idComment = req.params.idComment;
+  const dataComment = req.body.comments_text;
+
+  const updatedComment = await updatedCommentsServices(
+    id,
+    idComment,
+    dataComment
+  );
+
+  return res.status(200).json(updatedComment);
+};
+
+export const deleteCommentsController = async (req: Request, res: Response) => {
+  const idComment = req.params.idComment;
+
+  await deleteCommentsService(idComment);
+
   return res.status(200).json({});
 };
 
-export const updateCommentsController = (req: Request, res: Response) => {
-  return res.status(200).json({});
-};
-
-export const deleteCommentsController = (req: Request, res: Response) => {
-  return res.status(200).json({});
-};
-
-export const getCommentsByIdProductController = (
+export const getCommentsByIdProductController = async (
   req: Request,
   res: Response
 ) => {
-  return res.status(200).json({});
+  const id = req.params.id;
+
+  const commentProduct = await listCommentsByIdServices(id);
+
+  return res.status(200).json(commentProduct);
 };
