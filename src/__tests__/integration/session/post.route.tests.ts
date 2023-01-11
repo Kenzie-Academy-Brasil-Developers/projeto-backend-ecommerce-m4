@@ -1,12 +1,12 @@
-import { mockedInvalidUserLogin } from "../../mocks";
 import {
   AppDataSource,
   DataSource,
   User,
   app,
+  request,
   mockedUserLogin,
   mockedUserRequest,
-  request,
+  mockedInvalidUserLogin,
 } from "../index";
 
 describe("/session", () => {

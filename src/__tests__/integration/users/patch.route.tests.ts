@@ -1,9 +1,10 @@
-import { mockedInvalidId, mockedUserUpdate2 } from "../../mocks";
 import {
   AppDataSource,
   DataSource,
   User,
   app,
+  mockedInvalidId,
+  mockedUserUpdate2,
   mockedAdminLogin,
   mockedAdminRequest,
   mockedUserAddressUpdate,
@@ -36,6 +37,23 @@ describe("/users", () => {
 
   afterAll(async () => {
     await connection.destroy();
+  });
+  it("PATCH /users/:id - should be able to update an user", async () => {
+    const user = userRepository.create(mockedUserRequest);
+    await userRepository.save(user);
+    const userLoginResponse = await request(app)
+      .post("/session")
+      .send(mockedUserLogin);
+    const userToken = `Bearer ${userLoginResponse.body.token}`;
+
+    const response = await request(app)
+      .patch(`${baseUrl}/${user.id}`)
+      .set("Authorization", userToken)
+      .send(mockedUserUpdate);
+
+    expect(response.body.name).toBe(mockedUserUpdate.name);
+    expect(response.body.age).toBe(mockedUserUpdate.age);
+    expect(response.status).toBe(200);
   });
 
   it("PATCH /users/:id - should not be able to update user without authentication", async () => {
@@ -123,24 +141,6 @@ describe("/users", () => {
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(403);
-  });
-
-  it("PATCH /users/:id - should be able to update an user", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
-    const userLoginResponse = await request(app)
-      .post("/session")
-      .send(mockedUserLogin);
-    const userToken = `Bearer ${userLoginResponse.body.token}`;
-
-    const response = await request(app)
-      .patch(`${baseUrl}/${user.id}`)
-      .set("Authorization", userToken)
-      .send(mockedUserUpdate);
-
-    expect(response.body.name).toBe(mockedUserUpdate.name);
-    expect(response.body.age).toBe(mockedUserUpdate.age);
-    expect(response.status).toBe(200);
   });
 
   it("PATCH /users/:id/address - should be able to update user address", async () => {
