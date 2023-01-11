@@ -5,14 +5,14 @@ import deleteCommentsService from "../../services/comments/deleteComments.servic
 import listCommentsByIdServices from "../../services/comments/listCommentsById.services";
 
 export const createCommentsController = async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const id: number = parseInt(req.params.id);
   const newComments = await createCommentsServices(id, req.body);
   return res.status(200).json(newComments);
 };
 
 export const updateCommentsController = async (req: Request, res: Response) => {
   const id = req.params.id;
-  const idComment = req.params.idComment;
+  const idComment = parseInt(req.params.idComment);
   const dataComment = req.body.comments_text;
 
   const updatedComment = await updatedCommentsServices(
@@ -25,7 +25,7 @@ export const updateCommentsController = async (req: Request, res: Response) => {
 };
 
 export const deleteCommentsController = async (req: Request, res: Response) => {
-  const idComment = req.params.idComment;
+  const idComment = parseInt(req.params.idComment);
 
   await deleteCommentsService(idComment);
 
@@ -36,7 +36,7 @@ export const getCommentsByIdProductController = async (
   req: Request,
   res: Response
 ) => {
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
 
   const commentProduct = await listCommentsByIdServices(id);
 
