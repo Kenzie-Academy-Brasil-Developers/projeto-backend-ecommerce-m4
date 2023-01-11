@@ -8,7 +8,7 @@ export class OrdersProducts {
   id: number;
 
   @Column()
-  amount: number;
+  ammount: number;
 
   @ManyToOne(() => Products, (orders) => orders.ordersProduct)
   product: Products;

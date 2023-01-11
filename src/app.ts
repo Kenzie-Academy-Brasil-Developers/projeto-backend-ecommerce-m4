@@ -8,8 +8,9 @@ import productRouter from "./router/product.routes";
 
 import { commentsRouter } from "./router/comments.router";
 
-import { router } from "./router/users.routes";
+
 import { errorHandler } from "./errors/errors";
+import ordersRouter from "./router/orders.routes";
 
 
 
@@ -18,7 +19,7 @@ const app = express();
 app.use(express.json());
 app.use("/users", UserRouter);
 app.use("/products", commentsRouter);
-
+app.use("/orders", ordersRouter)
 app.use("/products", productRouter);
 
 app.use(errorHandler)
