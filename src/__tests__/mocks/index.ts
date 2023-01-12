@@ -18,18 +18,18 @@ const mockedAdminRequest = {
   password: "1234",
   isAdm: true,
   address: {
-    city: "Rio de Janeiro",
-    state: "RJ",
+    city: "Tabatinga",
+    state: "AM",
     street: "Rua desconhecida",
     number: "22",
-    zipCode: "22031-123",
+    zipCode: "98031-123",
   },
   age: 22,
 };
 
 const mockedUserRequest2 = {
   name: "Gabriel Magalhães",
-  email: "gabriel@mail.com",
+  email: "pikachu@mail.com",
   password: "1234",
   address: {
     city: "Belo Horizonte",
@@ -94,6 +94,49 @@ const mockedUserUpdate2 = {
 };
 
 const mockedInvalidId = "4a1f1b51-eb60-4b1f-8356-59c4ccf24bf4";
+
+const mockedInvalidIdNumber = 9999999999;
+
+const mockedInvalidUserLogin = {
+  email: "tsunode@mail.com",
+  password: "0000",
+};
+
+const mockedProductRequest = {
+  name: "Boneco Goku",
+  description: "Action figure",
+  price: 12.5,
+  amount: 2,
+};
+
+const mockedProductRequest2 = {
+  name: "Boneco sasuke",
+  description: "Action figure",
+  price: 12.5,
+  amount: 2,
+};
+
+const mockedProductUpdate = {
+  name: "Boneco Naruto",
+  description: "Action figure melhor ainda",
+  price: 25.0,
+  amount: 4,
+};
+
+const mockedInvalidProductUpdateName = {
+  name: "Boneco Goku",
+};
+
+const mockedInvalidProductRequest = {
+  description: "Action figure",
+  amount: 2,
+};
+
+const mockedInvalidProductUpdateRequest = {
+  anime: "Naruto",
+  material: "Plástico",
+};
+
 export {
   mockedUserRequest,
   mockedUserResponse,
@@ -106,4 +149,12 @@ export {
   mockedAdminRequest,
   mockedInvalidId,
   mockedUserUpdate2,
+  mockedInvalidUserLogin,
+  mockedProductRequest,
+  mockedInvalidProductRequest,
+  mockedProductUpdate,
+  mockedProductRequest2,
+  mockedInvalidProductUpdateName,
+  mockedInvalidProductUpdateRequest,
+  mockedInvalidIdNumber,
 };

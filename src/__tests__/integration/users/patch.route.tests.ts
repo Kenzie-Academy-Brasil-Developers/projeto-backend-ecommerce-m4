@@ -1,9 +1,10 @@
-import { mockedInvalidId, mockedUserUpdate2 } from "../../mocks";
 import {
   AppDataSource,
   DataSource,
   User,
   app,
+  mockedInvalidId,
+  mockedUserUpdate2,
   mockedAdminLogin,
   mockedAdminRequest,
   mockedUserAddressUpdate,
@@ -30,12 +31,28 @@ describe("/users", () => {
   });
 
   beforeEach(async () => {
-    const usersData = await userRepository.find();
-    await userRepository.remove(usersData);
+    await userRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
     await connection.destroy();
+  });
+  it("PATCH /users/:id - should be able to update an user", async () => {
+    const user = userRepository.create(mockedUserRequest);
+    await userRepository.save(user);
+    const userLoginResponse = await request(app)
+      .post("/session")
+      .send(mockedUserLogin);
+    const userToken = `Bearer ${userLoginResponse.body.token}`;
+
+    const response = await request(app)
+      .patch(`${baseUrl}/${user.id}`)
+      .set("Authorization", userToken)
+      .send(mockedUserUpdate);
+
+    expect(response.body.name).toBe(mockedUserUpdate.name);
+    expect(response.body.age).toBe(mockedUserUpdate.age);
+    expect(response.status).toBe(200);
   });
 
   it("PATCH /users/:id - should not be able to update user without authentication", async () => {
@@ -125,24 +142,6 @@ describe("/users", () => {
     expect(response.status).toBe(403);
   });
 
-  it("PATCH /users/:id - should be able to update an user", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
-    const userLoginResponse = await request(app)
-      .post("/session")
-      .send(mockedUserLogin);
-    const userToken = `Bearer ${userLoginResponse.body.token}`;
-
-    const response = await request(app)
-      .patch(`${baseUrl}/${user.id}`)
-      .set("Authorization", userToken)
-      .send(mockedUserUpdate);
-
-    expect(response.body.name).toEqual(mockedUserUpdate.name);
-    expect(response.body.age).toEqual(mockedUserUpdate.age);
-    expect(response.status).toBe(200);
-  });
-
   it("PATCH /users/:id/address - should be able to update user address", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
@@ -156,17 +155,11 @@ describe("/users", () => {
       .set("Authorization", userToken)
       .send(mockedUserAddressUpdate);
 
-    expect(response.body.address.city).toEqual(mockedUserAddressUpdate.city);
-    expect(response.body.address.state).toEqual(mockedUserAddressUpdate.state);
-    expect(response.body.address.street).toEqual(
-      mockedUserAddressUpdate.street
-    );
-    expect(response.body.address.number).toEqual(
-      mockedUserAddressUpdate.number
-    );
-    expect(response.body.address.zipCode).toEqual(
-      mockedUserAddressUpdate.zipCode
-    );
+    expect(response.body.address.city).toBe(mockedUserAddressUpdate.city);
+    expect(response.body.address.state).toBe(mockedUserAddressUpdate.state);
+    expect(response.body.address.street).toBe(mockedUserAddressUpdate.street);
+    expect(response.body.address.number).toBe(mockedUserAddressUpdate.number);
+    expect(response.body.address.zipCode).toBe(mockedUserAddressUpdate.zipCode);
     expect(response.status).toBe(200);
   });
 });
