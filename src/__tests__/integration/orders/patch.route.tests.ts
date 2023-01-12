@@ -37,8 +37,8 @@ describe("/orders/:id", () => {
 
   beforeEach(async () => {
     await ordersProductsRepository.createQueryBuilder().delete().execute();
-    await ordersRepository.createQueryBuilder().delete().execute();
     await productRepository.createQueryBuilder().delete().execute();
+    await ordersRepository.createQueryBuilder().delete().execute();
     await userRepository.createQueryBuilder().delete().execute();
   });
 
