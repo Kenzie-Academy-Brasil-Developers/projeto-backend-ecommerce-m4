@@ -5,38 +5,32 @@ import deleteCommentsService from "../../services/comments/deleteComments.servic
 import listCommentsByIdServices from "../../services/comments/listCommentsById.services";
 
 export const createCommentsController = async (req: Request, res: Response) => {
-  const id = req.params.id;
-  const newComments = await createCommentsServices(id, req.body);
+  const id: number = parseInt(req.params.id);
+  const newComments = await createCommentsServices(id, req.body, req.user.id);
   return res.status(200).json(newComments);
 };
 
 export const updateCommentsController = async (req: Request, res: Response) => {
-  const id = req.params.id;
-  const idComment = req.params.idComment;
-  const dataComment = req.body.comments_text;
+  const idComment = parseInt(req.params.id);
 
-  const updatedComment = await updatedCommentsServices(
-    id,
-    idComment,
-    dataComment
-  );
+  const updatedComment = await updatedCommentsServices(idComment, req.body);
 
   return res.status(200).json(updatedComment);
 };
 
 export const deleteCommentsController = async (req: Request, res: Response) => {
-  const idComment = req.params.idComment;
+  const idComment = parseInt(req.params.id);
 
   await deleteCommentsService(idComment);
 
-  return res.status(200).json({});
+  return res.status(200).json();
 };
 
 export const getCommentsByIdProductController = async (
   req: Request,
   res: Response
 ) => {
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
 
   const commentProduct = await listCommentsByIdServices(id);
 

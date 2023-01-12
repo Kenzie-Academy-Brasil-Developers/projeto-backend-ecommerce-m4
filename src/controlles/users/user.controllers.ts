@@ -1,4 +1,4 @@
-import { instanceToPlain } from "class-transformer"
+import { instanceToPlain } from "class-transformer";
 import { Request, Response } from "express";
 import createUserService from "../../services/users/createUser.service";
 import deleteUserService from "../../services/users/deleteUser.service";
@@ -6,30 +6,30 @@ import listAllUsersService from "../../services/users/listAllUsers.service";
 import listUserIDService from "../../services/users/listUser.service";
 import upadateUserService from "../../services/users/updateUserservice";
 
-
-
-export const createUserController =async (req: Request, res: Response) => {
-  const user = await createUserService(req.body)
+export const createUserController = async (req: Request, res: Response) => {
+  const dataUser = req.body;
+  const user = await createUserService(dataUser);
   return res.status(201).json(instanceToPlain(user));
 };
 
-export const updateUserController =async (req: Request, res: Response) => {
+export const updateUserController = async (req: Request, res: Response) => {
+  const dataUser = req.body;
   const id = req.params.id;
-  const user = await upadateUserService(id,req.body)
+  const user = await upadateUserService(id, dataUser);
   return res.status(200).json(instanceToPlain(user));
 };
 
-export const deleteUserController = async(req: Request, res: Response) => {
-  await deleteUserService(req.params.id)
+export const deleteUserController = async (req: Request, res: Response) => {
+  await deleteUserService(req.params.id);
   return res.status(200).json();
 };
 
-export const getAllUsersController =async (req: Request, res: Response) => {
-  const users = await listAllUsersService()
+export const getAllUsersController = async (req: Request, res: Response) => {
+  const users = await listAllUsersService();
   return res.status(200).json(instanceToPlain(users));
 };
 
-export const getUserByIdController = async(req: Request, res: Response) => {
-  const user = await listUserIDService(req.params.id)
+export const getUserByIdController = async (req: Request, res: Response) => {
+  const user = await listUserIDService(req.params.id);
   return res.status(200).json(instanceToPlain(user));
 };

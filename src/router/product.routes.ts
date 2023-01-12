@@ -1,26 +1,38 @@
 import { Router } from "express";
-import { 
-    createProductController, 
-    listProductController,
-    updateProductController,
-    deleteProductController
+import {
+  createProductController,
+  listProductController,
+  updateProductController,
+  deleteProductController,
 } from "../controlles/products/products.controllers";
-import {productExistsMiddlewere} from "../middleweres/productExists.middlewere"
+import { authTokenMiddleware } from "../middleweres/authToken.middlewere";
+import { isAdmMiddlewere } from "../middleweres/isAdm.Middlewere";
+import { productExistsMiddlewere } from "../middleweres/productExists.middlewere";
 
 const productRouter = Router();
 
-productRouter.post('', createProductController)
+productRouter.post(
+  "",
+  authTokenMiddleware,
+  isAdmMiddlewere,
+  createProductController
+);
 
-productRouter.get('', listProductController)
+productRouter.get("", listProductController);
 
-productRouter.patch('/:id', 
-    productExistsMiddlewere, 
-    updateProductController
-)
-productRouter.delete('/:id',
-    productExistsMiddlewere,
-    deleteProductController
-)
+productRouter.patch(
+  "/:id",
+  authTokenMiddleware,
+  isAdmMiddlewere,
+  productExistsMiddlewere,
+  updateProductController
+);
+productRouter.delete(
+  "/:id",
+  authTokenMiddleware,
+  isAdmMiddlewere,
+  productExistsMiddlewere,
+  deleteProductController
+);
 
-export default productRouter
-
+export default productRouter;

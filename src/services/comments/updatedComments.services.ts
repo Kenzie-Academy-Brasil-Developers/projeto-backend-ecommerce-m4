@@ -1,7 +1,11 @@
 import AppDataSource from "../../data-source";
 import { Comments } from "../../entities/comments.entity";
+import { IComments } from "./createComments.services";
 
-const updatedCommentsServices = async (idProduct, idComment, dataComment) => {
+const updatedCommentsServices = async (
+  idComment: number,
+  { comment_text }
+): Promise<IComments> => {
   const commentRepository = AppDataSource.getRepository(Comments);
 
   const comment = await commentRepository.findOneBy({
@@ -10,10 +14,12 @@ const updatedCommentsServices = async (idProduct, idComment, dataComment) => {
 
   await commentRepository.update(idComment, {
     ...comment,
-    comments_text: dataComment,
+    comments_text: comment_text,
   });
 
-  return comment;
+  const commentUpdated = await commentRepository.findOneBy({ id: idComment });
+
+  return commentUpdated;
 };
 
 export default updatedCommentsServices;
