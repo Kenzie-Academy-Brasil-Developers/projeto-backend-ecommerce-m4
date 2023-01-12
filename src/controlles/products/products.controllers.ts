@@ -1,7 +1,10 @@
+
+
 import { Request, Response } from "express";
 import createProductsServices, {
   IproductRequest,
 } from "../../services/products/createProducts.services";
+
 import deleteProductService from "../../services/products/deleteProduct.service";
 import updateProductService from "../../services/products/updateProduct.service";
 import listProductsServices from "../../services/products/listProducts.services";
@@ -15,10 +18,15 @@ interface iProductUpdateRequest {
 }
 
 export const createProductController = async (req: Request, res: Response) => {
-  const productData: IproductRequest = req.body;
-  const newProduct = await createProductsServices(productData);
 
-  return res.status(200).json(newProduct);
+
+  const productData: IproductRequest = req.body
+  const newProduct = await createProductsServices(productData)
+
+  return res.status(200).json(newProduct)
+
+ 
+
 };
 
 export const listProductController = async (req: Request, res: Response) => {
@@ -37,9 +45,17 @@ export const updateProductController = async (req: Request, res: Response) => {
 };
 
 export const deleteProductController = async (req: Request, res: Response) => {
+
   const idProduct = Number(req.params.id);
 
   await deleteProductService(idProduct);
 
-  return res.status(200).json();
+
+  return res.status(200).json()
+
+
 };
+
+ 
+
+
