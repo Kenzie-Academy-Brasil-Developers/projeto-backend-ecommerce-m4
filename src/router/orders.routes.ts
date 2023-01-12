@@ -1,8 +1,11 @@
 import {Router} from "express"
-import { createOrderController } from "../controlles/orders/orders.controllers"
+import { createOrderController, updateOrderController } from "../controlles/orders/orders.controllers"
+import { authTokenMiddleware } from "../middleweres/authToken.middlewere"
+import { isAdmMiddlewere } from "../middleweres/isAdm.Middlewere"
 
 const ordersRouter = Router()
 
-ordersRouter.post('',createOrderController)
+ordersRouter.post('',authTokenMiddleware,createOrderController)
+ordersRouter.patch('/:id',authTokenMiddleware, isAdmMiddlewere,updateOrderController)
 
 export default ordersRouter

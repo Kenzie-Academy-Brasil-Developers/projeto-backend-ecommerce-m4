@@ -25,10 +25,11 @@ app.use("/products", commentsRouter);
 
 
 
-app.use("/users", addressRouter);
+app.use("/address", addressRouter);
 
 app.use("/products", productRouter);
 app.use("/session", sessionRouter);
+app.use("/orders", ordersRouter);
 
 app.use(errorHandler);
 
