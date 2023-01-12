@@ -1,4 +1,6 @@
 import {
+  mockedAdminLogin,
+  mockedAdminRequest,
   mockedCommentRequest,
   mockedCommentUpdateRequest,
   mockedInvalidCommentRequest,
@@ -46,7 +48,7 @@ describe("/products/:id/comments", () => {
     await connection.destroy();
   });
 
-  it("PATCH /products/:id/comments/:id - should be able to update a comment", async () => {
+  it("DELETE /products/:id/comments/:id - should be able to delete a comment", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
     const userLoginResponse = await request(app)
@@ -65,17 +67,18 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .patch(`${baseUrl}/${product.id}/comments/${comment.id}`)
-      .set("Authorization", userToken)
-      .send(mockedCommentUpdateRequest);
+      .delete(`${baseUrl}/${product.id}/comments/${comment.id}`)
+      .set("Authorization", userToken);
 
-    expect(response.status).toBe(200);
-    expect(response.body.comments_text).toBe(
-      mockedCommentUpdateRequest.comments_text
-    );
+    const dbCommentCheck = await commentsRepository.findOneBy({
+      id: comment.id,
+    });
+
+    expect(response.status).toBe(204);
+    expect(dbCommentCheck).toBeNull();
   });
 
-  it("PATCH /products/:id/comments/:id - should not be able to update a comment without authentication", async () => {
+  it("DELETE /products/:id/comments/:id - should not be able to delete a comment without authentication", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
 
@@ -89,15 +92,15 @@ describe("/products/:id/comments", () => {
     });
     await commentsRepository.save(comment);
 
-    const response = await request(app)
-      .patch(`${baseUrl}/${product.id}/comments/${comment.id}`)
-      .send(mockedCommentUpdateRequest);
+    const response = await request(app).delete(
+      `${baseUrl}/${product.id}/comments/${comment.id}`
+    );
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty("message");
   });
 
-  it("PATCH /products/:id/comments/:id - should not be able to update a comment with invalid product id", async () => {
+  it("DELETE /products/:id/comments/:id - should not be able to delete a comment with invalid product id", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
     const userLoginResponse = await request(app)
@@ -116,15 +119,14 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .patch(`${baseUrl}/${mockedInvalidIdNumber}/comments/${comment.id}`)
-      .set("Authorization", userToken)
-      .send(mockedCommentUpdateRequest);
+      .delete(`${baseUrl}/${mockedInvalidIdNumber}/comments/${comment.id}`)
+      .set("Authorization", userToken);
 
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("message");
   });
 
-  it("POST /products/:id/comments/:id - should not be able to update another user comments", async () => {
+  it("DELETE /products/:id/comments/:id - should not be able to delete another user comments being a normal user", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
     const userLoginResponse = await request(app)
@@ -132,9 +134,9 @@ describe("/products/:id/comments", () => {
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const userOwnerOfCommentToBeUpdated =
+    const userOwnerOfCommentToBeDeleted =
       userRepository.create(mockedUserRequest2);
-    await userRepository.save(userOwnerOfCommentToBeUpdated);
+    await userRepository.save(userOwnerOfCommentToBeDeleted);
 
     const product = productRepository.create(mockedProductRequest);
     await productRepository.save(product);
@@ -142,16 +144,49 @@ describe("/products/:id/comments", () => {
     const comment = commentsRepository.create({
       ...mockedCommentRequest,
       product,
-      user: userOwnerOfCommentToBeUpdated,
+      user: userOwnerOfCommentToBeDeleted,
     });
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .patch(`${baseUrl}/${product.id}/comments/${comment.id}`)
-      .set("Authorization", userToken)
-      .send(mockedCommentUpdateRequest);
+      .delete(`${baseUrl}/${product.id}/comments/${comment.id}`)
+      .set("Authorization", userToken);
 
     expect(response.status).toBe(403);
     expect(response.body).toHaveProperty("message");
+  });
+
+  it("DELETE /products/:id/comments/:id - should be able to delete another user comments being an admin", async () => {
+    const admin = userRepository.create(mockedAdminRequest);
+    await userRepository.save(admin);
+    const adminLoginResponse = await request(app)
+      .post("/session")
+      .send(mockedAdminLogin);
+    const adminToken = `Bearer ${adminLoginResponse.body.token}`;
+
+    const userOwnerOfCommentToBeDeleted =
+      userRepository.create(mockedUserRequest);
+    await userRepository.save(userOwnerOfCommentToBeDeleted);
+
+    const product = productRepository.create(mockedProductRequest);
+    await productRepository.save(product);
+
+    const comment = commentsRepository.create({
+      ...mockedCommentRequest,
+      product,
+      user: userOwnerOfCommentToBeDeleted,
+    });
+    await commentsRepository.save(comment);
+
+    const response = await request(app)
+      .delete(`${baseUrl}/${product.id}/comments/${comment.id}`)
+      .set("Authorization", adminToken);
+
+    const dbCommentCheck = await commentsRepository.findOneBy({
+      id: comment.id,
+    });
+
+    expect(response.status).toBe(204);
+    expect(dbCommentCheck).toBeNull();
   });
 });

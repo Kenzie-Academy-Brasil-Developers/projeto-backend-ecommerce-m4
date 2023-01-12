@@ -27,9 +27,9 @@ describe("/products/:id/comments", () => {
   });
 
   beforeEach(async () => {
-    await userRepository.createQueryBuilder().delete().execute();
-    await productRepository.createQueryBuilder().delete().execute();
     await commentsRepository.createQueryBuilder().delete().execute();
+    await productRepository.createQueryBuilder().delete().execute();
+    await userRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {

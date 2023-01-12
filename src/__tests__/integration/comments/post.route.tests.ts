@@ -34,9 +34,9 @@ describe("/products/:id/comments", () => {
   });
 
   beforeEach(async () => {
-    await userRepository.createQueryBuilder().delete().execute();
-    await productRepository.createQueryBuilder().delete().execute();
     await commentsRepository.createQueryBuilder().delete().execute();
+    await productRepository.createQueryBuilder().delete().execute();
+    await userRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -46,6 +46,7 @@ describe("/products/:id/comments", () => {
   it("POST /products/:id/comments - should be able to create a comment", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
+
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
@@ -70,21 +71,10 @@ describe("/products/:id/comments", () => {
     expect(comment).toBeTruthy();
   });
 
-  it("POST /products/:id/comments - should not be able to create a comment without authentication", async () => {
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
-
-    const response = await request(app)
-      .post(`${baseUrl}/${product.id}/comments`)
-      .send(mockedCommentRequest);
-
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message");
-  });
-
   it("POST /products/:id/comments - should be able to create a comment excluding additional invalid data", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
+
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
@@ -102,6 +92,18 @@ describe("/products/:id/comments", () => {
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("comments_text");
     expect(response.body).not.toHaveProperty("campo_invalido");
+  });
+
+  it("POST /products/:id/comments - should not be able to create a comment without authentication", async () => {
+    const product = productRepository.create(mockedProductRequest);
+    await productRepository.save(product);
+
+    const response = await request(app)
+      .post(`${baseUrl}/${product.id}/comments`)
+      .send(mockedCommentRequest);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
   });
 
   it("POST /products/:id/comments - should not be able to create a comment with invalid product id", async () => {
