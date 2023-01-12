@@ -1,3 +1,4 @@
+import { getRounds } from "bcryptjs";
 import {
   AppDataSource,
   DataSource,
@@ -42,7 +43,7 @@ describe("/users", () => {
       id: response.body.id,
     });
     expect(amount).toBe(1);
-    // expect(getRounds(user[0].password)).toBeTruthy();
+    expect(getRounds(user[0].password)).toBeTruthy();
   });
 
   it("POST /users - should not be able to create user with invalid body", async () => {
