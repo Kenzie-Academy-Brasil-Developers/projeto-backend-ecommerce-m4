@@ -93,15 +93,6 @@ const mockedUserUpdate2 = {
   age: 14,
 };
 
-const mockedInvalidId = "4a1f1b51-eb60-4b1f-8356-59c4ccf24bf4";
-
-const mockedInvalidIdNumber = 9999999999;
-
-const mockedInvalidUserLogin = {
-  email: "tsunode@mail.com",
-  password: "0000",
-};
-
 const mockedProductRequest = {
   name: "Boneco Goku",
   description: "Action figure",
@@ -123,8 +114,30 @@ const mockedProductUpdate = {
   amount: 4,
 };
 
+const mockedCommentRequest = {
+  comments_text: "Esse produto é muito bom!",
+};
+
+const mockedCommentUpdateRequest = {
+  comments_text: "Esse produto tá ruimzao agora",
+};
+
+const mockedInvalidId = "4a1f1b51-eb60-4b1f-8356-59c4ccf24bf4";
+
+const mockedInvalidIdNumber = 9999999999;
+
+const mockedInvalidUserLogin = {
+  email: "tsunode@mail.com",
+  password: "0000",
+};
+
 const mockedInvalidProductUpdateName = {
   name: "Boneco Goku",
+};
+
+const mockedInvalidCommentUpdateRequest = {
+  comments_text: "Esse produto tá ruimzao",
+  campo_invalido: "hahahaaa",
 };
 
 const mockedInvalidProductRequest = {
@@ -135,6 +148,11 @@ const mockedInvalidProductRequest = {
 const mockedInvalidProductUpdateRequest = {
   anime: "Naruto",
   material: "Plástico",
+};
+
+const mockedInvalidCommentRequest = {
+  comments_text: "Tem que dar erro",
+  campo_invalido: "hahaha",
 };
 
 export {
@@ -157,4 +175,8 @@ export {
   mockedInvalidProductUpdateName,
   mockedInvalidProductUpdateRequest,
   mockedInvalidIdNumber,
+  mockedCommentRequest,
+  mockedInvalidCommentRequest,
+  mockedCommentUpdateRequest,
+  mockedInvalidCommentUpdateRequest,
 };

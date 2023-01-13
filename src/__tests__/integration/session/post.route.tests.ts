@@ -38,8 +38,8 @@ describe("/session", () => {
 
     const response = await request(app).post(baseUrl).send(mockedUserLogin);
 
-    expect(response.body).toHaveProperty("token");
     expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("token");
   });
   it("POST / session - should not be able to login with incorrect password or email", async () => {
     const user = userRepository.create(mockedUserRequest);
@@ -49,8 +49,8 @@ describe("/session", () => {
       .post(baseUrl)
       .send(mockedInvalidUserLogin);
 
+    expect(response.status).toBe(400);
     expect(response.body).toHaveProperty("message");
-    expect(response.status).toBe(401);
   });
   it("POST / session - should not be able to login if the user is deleted", async () => {
     const user = userRepository.create(mockedUserRequest);
@@ -58,7 +58,7 @@ describe("/session", () => {
 
     const response = await request(app).post(baseUrl).send(mockedUserLogin);
 
-    expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
   });
 });

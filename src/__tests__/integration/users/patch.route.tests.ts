@@ -50,9 +50,9 @@ describe("/users", () => {
       .set("Authorization", userToken)
       .send(mockedUserUpdate);
 
+    expect(response.status).toBe(200);
     expect(response.body.name).toBe(mockedUserUpdate.name);
     expect(response.body.age).toBe(mockedUserUpdate.age);
-    expect(response.status).toBe(200);
   });
 
   it("PATCH /users/:id - should not be able to update user without authentication", async () => {
@@ -61,8 +61,8 @@ describe("/users", () => {
 
     const response = await request(app).patch(`/users/${user.id}`);
 
-    expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
   });
 
   it("PATCH /users/:id - should not be able to update user with invalid id", async () => {
@@ -78,8 +78,8 @@ describe("/users", () => {
       .set("Authorization", adminToken)
       .send(mockedUserUpdate);
 
-    expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("message");
   });
 
   it("PATCH /users/:id - should not be able to update isAdm field value", async () => {
@@ -98,8 +98,8 @@ describe("/users", () => {
       .set("Authorization", adminToken)
       .send({ isAdm: true });
 
-    expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
   });
 
   it("PATCH /users/:id - should not be able to update user id", async () => {
@@ -118,8 +118,8 @@ describe("/users", () => {
       .set("Authorization", adminToken)
       .send({ id: mockedInvalidId });
 
-    expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
   });
 
   it("PATCH /users/:id - should not be able to update another user without adm permission", async () => {
@@ -138,8 +138,8 @@ describe("/users", () => {
       .set("Authorization", userThatWillUpdateToken)
       .send(mockedUserUpdate2);
 
-    expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
   });
 
   it("PATCH /users/:id/address - should be able to update user address", async () => {
@@ -155,11 +155,11 @@ describe("/users", () => {
       .set("Authorization", userToken)
       .send(mockedUserAddressUpdate);
 
+    expect(response.status).toBe(200);
     expect(response.body.address.city).toBe(mockedUserAddressUpdate.city);
     expect(response.body.address.state).toBe(mockedUserAddressUpdate.state);
     expect(response.body.address.street).toBe(mockedUserAddressUpdate.street);
     expect(response.body.address.number).toBe(mockedUserAddressUpdate.number);
     expect(response.body.address.zipCode).toBe(mockedUserAddressUpdate.zipCode);
-    expect(response.status).toBe(200);
   });
 });
