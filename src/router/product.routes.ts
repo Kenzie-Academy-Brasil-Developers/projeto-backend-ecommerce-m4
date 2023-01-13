@@ -8,13 +8,16 @@ import {
 import { authTokenMiddleware } from "../middleweres/authToken.middlewere";
 import { isAdmMiddlewere } from "../middleweres/isAdm.Middlewere";
 import { productExistsMiddlewere } from "../middleweres/productExists.middlewere";
+import validatedBodyMiddleware from "../middleweres/validatedData.middleware";
+import { productRequestSchema, productUpdateRequestSchema } from "../schemas/products/products.schema";
 
 const productRouter = Router();
 
 productRouter.post(
   "",
   authTokenMiddleware,
-  isAdmMiddlewere,
+  isAdmMiddlewere, 
+  validatedBodyMiddleware(productRequestSchema),
   createProductController
 );
 
@@ -25,6 +28,7 @@ productRouter.patch(
   authTokenMiddleware,
   isAdmMiddlewere,
   productExistsMiddlewere,
+  validatedBodyMiddleware(productUpdateRequestSchema),
   updateProductController
 );
 productRouter.delete(

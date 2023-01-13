@@ -22,9 +22,11 @@ const updatedAddressServices = async (idUser, dataAddress) => {
 
     await addressRepository.save(userAdress.address);
 
-    console.log(userAdress)
-
-  return userAdress.address; 
+  
+  return {
+    ...userAdress.address,
+    ...dataAddress
+  }; 
 
 };
 
