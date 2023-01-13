@@ -3,4 +3,3 @@ yarn.lock
 dist
 .env
 migrations
-__tests__
