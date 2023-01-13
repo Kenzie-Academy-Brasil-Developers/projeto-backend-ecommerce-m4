@@ -209,7 +209,6 @@ ________________________________________________________________________________
   "description": string,
   "price": number,
   "amount": number,
-  "available": boolean
 }
 
 ````
