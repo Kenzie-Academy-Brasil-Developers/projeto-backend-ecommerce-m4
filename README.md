@@ -1,4 +1,3 @@
-
 # 💻 Projeto-backend-ecommerce-m4
 
 
@@ -38,6 +37,7 @@ ________________________________________________________________________________
   "name": string,
   "age": number,
   "email": string,
+  "password": string
   "address": {
     "street": string,
     "city": string,
@@ -52,23 +52,24 @@ ________________________________________________________________________________
 **Response:**
 ````
 {
-  "name": string,
-  "age": number,
-  "email": string,
-  "isAdm": boolean,
-  "createdAt": Date,
-  "updatedAt": Date,
-  "deletedAt": Date,
-  "address": {
-    "street": string,
-    "city": string,
-    "zipCode": string,
-    "state": string,
-    "number": string
-   }
+   "name": string,
+    "email": email,
+    "age": number,
+    "address": {
+        "id": number,
+        "street": string,
+        "city": string,
+        "state": string,
+        "zipCode": string,
+        "number": string
+    },
+    "id": string,
+    "createdAt": Date,
+    "updatedAt": Date
  }
 
 ````
+
 _______________________________________________________________________________________________________________________________________________________________________
 
 🔵 **GET - /users**
@@ -78,25 +79,24 @@ ________________________________________________________________________________
 **Response:**
 ````
 [
-    {
-    "id": string,
-    "name": string,
-    "age": number,
-    "email": string,
-    "isAdm": boolean,
-    "createdAt": Date,
-    "updatedAt": Date,
-    "deletedAt": Date,
-    "address": {
-      "street": string,
-      "city": string,
-      "zipCode": string,
-      "state": string,
-      "number": string
-    }
-  }
-  
+  {
+      "name": string,
+      "email": email,
+      "age": number,
+      "address": {
+          "id": number,
+          "street": string,
+          "city": string,
+          "state": string,
+          "zipCode": string,
+          "number": string
+      },
+      "id": string,
+      "createdAt": Date,
+      "updatedAt": Date
+   }
 ]
+
 ````
 _______________________________________________________________________________________________________________________________________________________________________
 
@@ -107,21 +107,20 @@ ________________________________________________________________________________
 **Response:**
  ````
 {
-  "id": string,
   "name": string,
+  "email": email,
   "age": number,
-  "email": string,
-  "isAdm": boolean,
-  "createdAt": Date,
-  "updatedAt": Date,
-  "deletedAt": Date,
   "address": {
-    "street": string,
-    "city": string,
-    "zipCode": string,
-    "state": string,
-    "number": string
-   }
+      "id": number,
+      "street": string,
+      "city": string,
+      "state": string,
+      "zipCode": string,
+      "number": string
+  },
+  "id": string,
+  "createdAt": Date,
+  "updatedAt": Date
 }
 ````
 
@@ -141,28 +140,27 @@ ________________________________________________________________________________
 ````
 
 **Response:**
-````
+ ````
 {
-  "id": string,
   "name": string,
+  "email": email,
   "age": number,
-   "email": string,
-  "isAdm": boolean,
-  "createdAt": Date,
-  "updatedAt": Date,
-  "deletedAt": Date,
   "address": {
-    "street": string,
-    "city": string,
-    "zipCode": string,
-    "state": string,
-    "number": string
-  }
+      "id": number,
+      "street": string,
+      "city": string,
+      "state": string,
+      "zipCode": string,
+      "number": string
+  },
+  "id": string,
+  "createdAt": Date,
+  "updatedAt": Date
 }
 ````
 _______________________________________________________________________________________________________________________________________________________________________
 
-🟡 **PATCH - users/user-Id/address**
+🟡 **PATCH - /address**
 
 **Request:**
 ````
@@ -188,6 +186,12 @@ ________________________________________________________________________________
 }
 
 ````
+
+_______________________________________________________________________________________________________________________________________________________________________
+
+🔴 **DELETE - /users/id-user**
+
+* Deleta usuário.
 
 _______________________________________________________________________________________________________________________________________________________________________
 
@@ -272,11 +276,11 @@ ________________________________________________________________________________
 **Request:**
 ````
 {
-  "name": string,
-  "description": string,
-  "price": number,
-  "amount": number,
-  "avaible": boolean
+  "name"?: string,
+  "description"?: string,
+  "price"?: number,
+  "amount"?: number,
+  "available"/: boolean
 }
 
 ````
@@ -317,11 +321,29 @@ ________________________________________________________________________________
 
 **Response:**
 ````
-{
- "id": number,
- "comment_text": string,
- "createdAt": Date,
- "updatedAt": Date
+ "comments_text": string,
+  "user": {
+      "id": string,
+      "name": string,
+      "email": string,
+      "password": string,
+      "age": number,
+      "createdAt": Date,
+      "updatedAt": Date,
+      "isAdm": true,
+  },
+  "product": {
+      "id": number,
+      "name": string,
+      "description": string,
+      "price": number,
+      "amount": number,
+      "available": boolean
+  },
+  "deletedAt": null | Date,
+  "id": number,
+  "createdAt": Date,
+  "updatedAt": Date
 }
 
 ````
@@ -334,14 +356,34 @@ ________________________________________________________________________________
 **Response:**
 ````
 [
-
   {
-   "id": number,
-   "comment_text": string,
-   "createdAt": Date,
-   "updatedAt": Date
+    "id": number,
+    "name": string,
+    "description": string,
+    "price": number,
+    "amount": number,
+    "available": boolean,
+    "comments": [
+      {
+        "id": number,
+        "comments_text": string,
+        "createdAt": Date,
+        "updatedAt": Date,
+      },
+      {
+       "id": number,
+        "comments_text": string,
+        "createdAt": Date,
+        "updatedAt": Date,
+      },
+      {
+        "id": number,
+        "comments_text": string,
+        "createdAt": Date,
+        "updatedAt": Date,
+      }
+    ]
   }
-
 ]
 ````
 _______________________________________________________________________________________________________________________________________________________________________
@@ -364,9 +406,9 @@ ________________________________________________________________________________
  "comment_text": string,
  "createdAt": Date,
  "updatedAt": Date
+ "deletedAt": Date
 }
 ````
-
 _______________________________________________________________________________________________________________________________________________________________________
 
 🔴 **DELETE - /products/comments/comments-Id**
@@ -377,17 +419,114 @@ ________________________________________________________________________________
 
 ## :mega: Rotas para criar os pedidos
 
-🟢 **GET - /orders**
+🟢 **POST - /orders**
+
+* Cria Pedidos
+
+**Request:**
+````
+{
+  "product": number,
+  "amount": number    
+}
+````
+
+**Response:**
+````
+{message: string}
+````
+
+_______________________________________________________________________________________________________________________________________________________________________
+
+🔵 **GET - /orders**
 
 * Lista todos os pedidios 
 
 **Response:**
 ````
 {
-  "id": number,
-  "ordered: Date,
-  "delivered: boolean
+    "id": number,
+    "coments_text": string,
+    "createdAt": Date,
+    "updatedAt": Date,
 }
+[
+  {
+    "id": number,
+    "orderedAt": Date,
+    "delivered": boolean,
+    "ordersProducts": [
+      {
+        "id": number,
+        "ammount": number,
+        "product": {
+          "id": number,
+          "name": string,
+          "description": string,
+          "price": number,
+          "amount": number,
+          "available": boolean
+         }
+    },
+    {
+      "id": 2,
+      "amount": number,
+      "product": {
+        "id": number,
+        "name": string,
+        "description": string,
+        "price": number,
+        "amount": number,
+        "available": boolean
+       }
+    }
+   ]
+  }
+]
+````
+
+_______________________________________________________________________________________________________________________________________________________________________
+
+🔵 **GET - /orders/id-order**
+
+*  Lista todos os produtos de um pedido 
+
+**Response:**
+````
+[
+ {
+   "id": number,
+   "orderedAt": Date,
+   "delivered": boolean,
+   "ordersProducts": [
+     {
+       "id": number,
+       "amount": number,
+       "product": {
+         "id": number,
+         "name": string,
+         "description": string,
+         "price": number,
+         "amount": number,
+         "available": boolean
+        }
+      },
+      {
+       "id": number,
+       "amount": number,
+       "product": {
+         "id": number,
+         "name": string,
+         "description": string,
+         "price": number,
+         "amount": number,
+         "available": boolean
+        }
+      }
+    ]
+  }
+]
+
 ````
 
 _______________________________________________________________________________________________________________________________________________________________________
@@ -395,13 +534,6 @@ ________________________________________________________________________________
 🟡 **PATCH - /orders/order-Id**
 
 * Atualizar um pedido específico
-
-**Request:**
-````
-{
-  "delivered": boolean
-}
-````
 
 **Response:**
 ````
@@ -412,5 +544,3 @@ ________________________________________________________________________________
 }
 ````
 _______________________________________________________________________________________________________________________________________________________________________
-
-
