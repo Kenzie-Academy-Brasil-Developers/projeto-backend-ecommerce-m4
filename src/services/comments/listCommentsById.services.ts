@@ -1,19 +1,24 @@
+import { Products } from './../../entities/products.entity';
 import AppDataSource from "../../data-source";
 import { Comments } from "../../entities/comments.entity";
-import { IComments } from "./createComments.services";
 
 const listCommentsByIdServices = async (
   idProduct: number
-): Promise<IComments[]> => {
+)=> {
   const commentsRepository = AppDataSource.getRepository(Comments);
+  const productsRepository = AppDataSource.getRepository(Products);
 
-  const comments = await commentsRepository.find({
-    where: {
-      id: idProduct,
+  const product = await productsRepository.find({
+    where:{
+      id: idProduct
     },
-  });
+    relations:{
+      comments: true
+    }
+  })
 
-  return comments;
+
+  return product;
 };
 
 export default listCommentsByIdServices;

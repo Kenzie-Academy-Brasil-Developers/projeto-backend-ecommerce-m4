@@ -4,9 +4,9 @@ import { Orders } from "../../entities/orders.entity"
 import { OrdersProducts } from "../../entities/ordersProducts.entity"
 import { User } from "../../entities/user.entity"
 
-const createOrderService = async(dataOrder)=>{
+const createOrderService = async(dataOrder, idUser)=>{
 
-    const idUser = "0eedece5-a8c6-41d3-a07c-1b807aaa7520"
+    
     const userRepository = AppDataSource.getRepository(User)
     const orderRepository = AppDataSource.getRepository(Orders)
     const orderProductsRepository = AppDataSource.getRepository(OrdersProducts)
@@ -21,15 +21,18 @@ const createOrderService = async(dataOrder)=>{
 
     console.log(dataOrder)
     
+    
+    dataOrder.forEach ( async (product) => {
+        const newOrdersProduct=  orderProductsRepository.create({
+            ...product,
+            orders: ordersCreated
+            
+        });
+     await orderProductsRepository.save(newOrdersProduct)
 
-    const newOrdersProduct=  orderProductsRepository.create({
-        ...dataOrder,
-        orders: ordersCreated
-
-        
     })
 
-    await orderProductsRepository.save(newOrdersProduct)
+    return {message: 'order created successfully'}
 
     
 }

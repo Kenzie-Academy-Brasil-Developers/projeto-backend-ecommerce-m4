@@ -26,10 +26,8 @@ export const deleteCommentsController = async (req: Request, res: Response) => {
   return res.status(200).json();
 };
 
-export const getCommentsByIdProductController = async (
-  req: Request,
-  res: Response
-) => {
+export const getCommentsByIdProductController = async (  req: Request,res: Response) => {
+ 
   const id = parseInt(req.params.id);
 
   const commentProduct = await listCommentsByIdServices(id);
