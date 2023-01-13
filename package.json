@@ -16,7 +16,8 @@
     "jsonwebtoken": "8.5.1",
     "pg": "^8.8.0",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.3.11"
+    "typeorm": "^0.3.11",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "dev": "ts-node-dev --ignore-watch node_modules src/server.ts",

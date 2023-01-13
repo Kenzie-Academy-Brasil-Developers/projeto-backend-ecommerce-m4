@@ -8,12 +8,15 @@ import {
 import { authTokenMiddleware } from "../middleweres/authToken.middlewere";
 import { commentExistsMiddlewere } from "../middleweres/commentExists.middlewere";
 import { validateUserPermissionsMiddlewere } from "../middleweres/validateUserPermissions.middlewere";
+import validatedBodyMiddleware from "../middleweres/validatedData.middleware";
+import {commentsRequestSchema} from "../schemas/comments/comments.schemas"
 
 export const commentsRouter = Router();
 
 commentsRouter.post(
   "/:id/comments",
   authTokenMiddleware,
+  validatedBodyMiddleware(commentsRequestSchema),
   createCommentsController
 );
 commentsRouter.get(
@@ -27,6 +30,7 @@ commentsRouter.patch(
   commentExistsMiddlewere,
   authTokenMiddleware,
   validateUserPermissionsMiddlewere,
+  validatedBodyMiddleware(commentsRequestSchema),
   updateCommentsController
 );
 commentsRouter.delete(

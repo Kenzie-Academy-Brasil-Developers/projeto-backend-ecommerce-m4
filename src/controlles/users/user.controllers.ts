@@ -21,7 +21,7 @@ export const updateUserController = async (req: Request, res: Response) => {
 
 export const deleteUserController = async (req: Request, res: Response) => {
   await deleteUserService(req.params.id);
-  return res.status(200).json();
+  return res.status(204).json();
 };
 
 export const getAllUsersController = async (req: Request, res: Response) => {

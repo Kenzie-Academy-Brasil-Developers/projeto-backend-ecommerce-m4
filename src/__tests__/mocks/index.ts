@@ -7,7 +7,7 @@ const mockedUserRequest = {
     state: "RJ",
     street: "Rua desconhecida",
     number: "22",
-    zipCode: "22031-123",
+    zipCode: "22031123",
   },
   age: 22,
 };
@@ -22,7 +22,7 @@ const mockedAdminRequest = {
     state: "AM",
     street: "Rua desconhecida",
     number: "22",
-    zipCode: "98031-123",
+    zipCode: "98031123",
   },
   age: 22,
 };
@@ -36,7 +36,7 @@ const mockedUserRequest2 = {
     state: "MG",
     street: "Rua desconhecida",
     number: "2222",
-    zipCode: "29331-123",
+    zipCode: "29331123",
   },
   age: 24,
 };
@@ -50,7 +50,7 @@ const mockedUserResponse = {
     state: "RJ",
     street: "Rua desconhecida",
     number: "22",
-    zipCode: "22031-123",
+    zipCode: "22031123",
   },
 };
 

@@ -20,9 +20,9 @@ const upadateUserService = async (
     throw new AppError("User not found");
   }
 
-  const updatedUser = userRepository.create({ ...user, ...dataUser });
-  await userRepository.save(updatedUser);
-  return updatedUser;
+  const updatedUser = userRepository.update(user.id,{ ...user, ...dataUser });
+  const returnUser = { ...user, ...dataUser }
+  return returnUser;
 };
 
 export default upadateUserService;
