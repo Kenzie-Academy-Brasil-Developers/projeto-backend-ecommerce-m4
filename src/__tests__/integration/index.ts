@@ -26,6 +26,7 @@ import {
   mockedUserUpdate,
   mockedInvalidId,
   mockedUserUpdate2,
+  mockedInvalidField,
 } from "../mocks";
 
 export {
@@ -51,6 +52,7 @@ export {
   mockedUserRequest2,
   mockedUserResponse,
   mockedUserUpdate,
+  mockedInvalidField,
   request,
   Address,
   Comments,

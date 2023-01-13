@@ -2,6 +2,7 @@ import {
   mockedAdminLogin,
   mockedAdminRequest,
   mockedInvalidIdNumber,
+  mockedInvalidField,
   mockedProductRequest,
   mockedUserLogin,
 } from "../../mocks";
@@ -166,11 +167,17 @@ describe("/orders/:id", () => {
       .set("Authorization", adminToken)
       .send({
         delivered: true,
+        mockedInvalidField,
       });
+
+    const atualizedOrder = await ordersRepository.findOneBy({
+      id: order.id,
+    });
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("delivered");
     expect(response.body.delivered).toBe(true);
+    expect(atualizedOrder).not.toHaveProperty("mockedInvalidField");
   });
 });
