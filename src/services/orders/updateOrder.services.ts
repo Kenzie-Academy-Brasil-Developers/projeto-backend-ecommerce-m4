@@ -1,8 +1,11 @@
 import AppDataSource from "../../data-source";
 import { Orders } from "../../entities/orders.entity";
 import { AppError } from "../../errors/errors";
+import { IOrderResponse } from "../../interfaces/orders.interfaces";
 
-export const orderUpdatedService = async (orderId: number) => {
+export const orderUpdatedService = async (
+  orderId: number
+): Promise<IOrderResponse> => {
   const ordersRepository = AppDataSource.getRepository(Orders);
 
   const order = await ordersRepository.findOneBy({ id: orderId });

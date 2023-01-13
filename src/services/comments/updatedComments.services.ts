@@ -1,11 +1,13 @@
 import AppDataSource from "../../data-source";
 import { Comments } from "../../entities/comments.entity";
-import { IComments } from "./createComments.services";
+import { ICommentsResponse } from "../../interfaces/comments.interfaces";
 
-const updatedCommentsServices = async (idComment: number, data): Promise<IComments> => {
+const updatedCommentsServices = async (
+  idComment: number,
+  data
+): Promise<ICommentsResponse> => {
   const commentRepository = AppDataSource.getRepository(Comments);
 
-  
   const comment = await commentRepository.findOneBy({
     id: idComment,
   });
