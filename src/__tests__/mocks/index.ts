@@ -80,7 +80,7 @@ const mockedUserAddressUpdate = {
   state: "SP",
   street: "Rua desconhecida",
   number: "25",
-  zipCode: "22031-123",
+  zipCode: "22031123",
 };
 
 const mockedUserUpdate = {
@@ -155,6 +155,8 @@ const mockedInvalidCommentRequest = {
   campo_invalido: "hahaha",
 };
 
+const mockedInvalidField = "INVALID_FIELD";
+
 export {
   mockedUserRequest,
   mockedUserResponse,
@@ -179,4 +181,5 @@ export {
   mockedInvalidCommentRequest,
   mockedCommentUpdateRequest,
   mockedInvalidCommentUpdateRequest,
+  mockedInvalidField,
 };

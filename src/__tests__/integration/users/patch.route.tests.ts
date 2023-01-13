@@ -83,43 +83,41 @@ describe("/users", () => {
   });
 
   it("PATCH /users/:id - should not be able to update isAdm field value", async () => {
-    const admin = userRepository.create(mockedAdminRequest);
-    await userRepository.save(admin);
-    const adminLoginResponse = await request(app)
+    const user = userRepository.create(mockedUserRequest);
+    await userRepository.save(user);
+    const userLoginResponse = await request(app)
       .post("/session")
-      .send(mockedAdminLogin);
-    const adminToken = `Bearer ${adminLoginResponse.body.token}`;
-
-    const userToBeUpdated = userRepository.create(mockedUserRequest);
-    await userRepository.save(userToBeUpdated);
+      .send(mockedUserLogin);
+    const userToken = `Bearer ${userLoginResponse.body.token}`;
 
     const response = await request(app)
-      .patch(`${baseUrl}/${userToBeUpdated.id}`)
-      .set("Authorization", adminToken)
+      .patch(`${baseUrl}/${user.id}`)
+      .set("Authorization", userToken)
       .send({ isAdm: true });
 
-    expect(response.status).toBe(403);
-    expect(response.body).toHaveProperty("message");
+    const userInDatabase = await userRepository.findOneBy({ id: user.id });
+
+    expect(response.status).toBe(200);
+    expect(userInDatabase.isAdm).toBe(false);
   });
 
   it("PATCH /users/:id - should not be able to update user id", async () => {
-    const admin = userRepository.create(mockedAdminRequest);
-    await userRepository.save(admin);
-    const adminLoginResponse = await request(app)
+    const user = userRepository.create(mockedUserRequest);
+    await userRepository.save(user);
+    const userLoginResponse = await request(app)
       .post("/session")
-      .send(mockedAdminLogin);
-    const adminToken = `Bearer ${adminLoginResponse.body.token}`;
-
-    const userToBeUpdated = userRepository.create(mockedUserRequest);
-    await userRepository.save(userToBeUpdated);
+      .send(mockedUserLogin);
+    const userToken = `Bearer ${userLoginResponse.body.token}`;
 
     const response = await request(app)
-      .patch(`${baseUrl}/${userToBeUpdated.id}`)
-      .set("Authorization", adminToken)
+      .patch(`${baseUrl}/${user.id}`)
+      .set("Authorization", userToken)
       .send({ id: mockedInvalidId });
 
-    expect(response.status).toBe(403);
-    expect(response.body).toHaveProperty("message");
+    const userInDatabase = await userRepository.findOneBy({ id: user.id });
+
+    expect(response.status).toBe(200);
+    expect(userInDatabase.id).toBe(user.id);
   });
 
   it("PATCH /users/:id - should not be able to update another user without adm permission", async () => {
@@ -142,7 +140,7 @@ describe("/users", () => {
     expect(response.body).toHaveProperty("message");
   });
 
-  it("PATCH /users/:id/address - should be able to update user address", async () => {
+  it("PATCH /address - should be able to update user address", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
     const userLoginResponse = await request(app)
@@ -151,15 +149,15 @@ describe("/users", () => {
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
     const response = await request(app)
-      .patch(`${baseUrl}/${user.id}/address`)
+      .patch(`/address`)
       .set("Authorization", userToken)
       .send(mockedUserAddressUpdate);
 
     expect(response.status).toBe(200);
-    expect(response.body.address.city).toBe(mockedUserAddressUpdate.city);
-    expect(response.body.address.state).toBe(mockedUserAddressUpdate.state);
-    expect(response.body.address.street).toBe(mockedUserAddressUpdate.street);
-    expect(response.body.address.number).toBe(mockedUserAddressUpdate.number);
-    expect(response.body.address.zipCode).toBe(mockedUserAddressUpdate.zipCode);
+    expect(response.body.city).toBe(mockedUserAddressUpdate.city);
+    expect(response.body.state).toBe(mockedUserAddressUpdate.state);
+    expect(response.body.street).toBe(mockedUserAddressUpdate.street);
+    expect(response.body.number).toBe(mockedUserAddressUpdate.number);
+    expect(response.body.zipCode).toBe(mockedUserAddressUpdate.zipCode);
   });
 });
