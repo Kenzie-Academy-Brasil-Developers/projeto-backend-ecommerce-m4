@@ -155,6 +155,8 @@ const mockedInvalidCommentRequest = {
   campo_invalido: "hahaha",
 };
 
+const mockedInvalidField = "INVALID_FIELD";
+
 export {
   mockedUserRequest,
   mockedUserResponse,
@@ -179,4 +181,5 @@ export {
   mockedInvalidCommentRequest,
   mockedCommentUpdateRequest,
   mockedInvalidCommentUpdateRequest,
+  mockedInvalidField,
 };
