@@ -2,25 +2,16 @@ import AppDataSource from "../../data-source";
 import { Comments } from "../../entities/comments.entity";
 import { Products } from "../../entities/products.entity";
 import { User } from "../../entities/user.entity";
-
-export interface IComments {
-  comments_text: string;
-}
-
-export interface IProductResponse {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  amount: number;
-  avaible: boolean;
-}
+import {
+  ICommentsRequest,
+  ICommentsResponse,
+} from "../../interfaces/comments.interfaces";
 
 const createCommentsServices = async (
   idProducts: number,
-  commentProduct: IComments,
+  commentProduct: ICommentsRequest,
   userId: string
-): Promise<IComments> => {
+): Promise<ICommentsResponse> => {
   const commentRepository = AppDataSource.getRepository(Comments);
   const userRepository = AppDataSource.getRepository(User);
   const productsRepository = AppDataSource.getRepository(Products);

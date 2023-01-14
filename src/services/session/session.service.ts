@@ -4,8 +4,15 @@ import AppDataSource from "../../data-source";
 import { User } from "../../entities/user.entity";
 import { AppError } from "../../errors/errors";
 import "dotenv/config";
+import {
+  ISessionRequest,
+  ISessionResponse,
+} from "../../interfaces/session.interfaces";
 
-export const sessionService = async ({ email, password }) => {
+export const sessionService = async ({
+  email,
+  password,
+}: ISessionRequest): Promise<ISessionResponse> => {
   const userRepository = AppDataSource.getRepository(User);
 
   const user = await userRepository.findOneBy({ email: email });

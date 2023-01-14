@@ -1,19 +1,20 @@
-import { Orders } from "../../entities/orders.entity"
-import { OrdersProducts } from "../../entities/ordersProducts.entity"
-import { AppDataSource } from "../../__tests__/integration"
+import { Orders } from "../../entities/orders.entity";
+import { IOrderResponse } from "../../interfaces/orders.interfaces";
+import { AppDataSource } from "../../__tests__/integration";
 
+const listOrderProductByIdServices = async (
+  idOrder: number
+): Promise<IOrderResponse[]> => {
+  const orderRepository = AppDataSource.getRepository(Orders);
 
-const listOrderProductServices = async(idOrder: number) => {
+  const order = await orderRepository
+    .createQueryBuilder("orders")
+    .innerJoinAndSelect("orders.ordersProducts", "ordersProduct")
+    .innerJoinAndSelect("ordersProduct.product", "product")
+    .where("orders.id = :id", { id: idOrder })
+    .getMany();
 
-    const orderRepository = AppDataSource.getRepository(Orders)
+  return order;
+};
 
-    const order = await orderRepository.createQueryBuilder('orders')
-    .innerJoinAndSelect('orders.ordersProducts', 'ordersProduct')
-    .innerJoinAndSelect('ordersProduct.product', 'product')
-    .where('orders.id = :id', {id:idOrder})
-    .getMany()
-
-    return order;
-}
-
-export default listOrderProductServices
+export default listOrderProductByIdServices;
