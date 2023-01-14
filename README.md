@@ -437,55 +437,6 @@ ________________________________________________________________________________
 
 _______________________________________________________________________________________________________________________________________________________________________
 
-🔵 **GET - /orders**
-
-* Lista todos os pedidios 
-
-**Response:**
-````
-{
-    "id": number,
-    "coments_text": string,
-    "createdAt": Date,
-    "updatedAt": Date,
-}
-[
-  {
-    "id": number,
-    "orderedAt": Date,
-    "delivered": boolean,
-    "ordersProducts": [
-      {
-        "id": number,
-        "ammount": number,
-        "product": {
-          "id": number,
-          "name": string,
-          "description": string,
-          "price": number,
-          "amount": number,
-          "available": boolean
-         }
-    },
-    {
-      "id": 2,
-      "amount": number,
-      "product": {
-        "id": number,
-        "name": string,
-        "description": string,
-        "price": number,
-        "amount": number,
-        "available": boolean
-       }
-    }
-   ]
-  }
-]
-````
-
-_______________________________________________________________________________________________________________________________________________________________________
-
 🔵 **GET - /orders/id-order**
 
 *  Lista todos os produtos de um pedido 
