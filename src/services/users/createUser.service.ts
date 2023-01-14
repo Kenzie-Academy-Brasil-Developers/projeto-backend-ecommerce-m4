@@ -1,8 +1,10 @@
 import AppDataSource from "../../data-source";
+import { IEmailRequest } from "../../email.interface";
 import { Address } from "../../entities/address.entity";
 import { User } from "../../entities/user.entity";
 import { AppError } from "../../errors/errors";
 import { IDataUserRequest } from "../../interfaces/users.interface";
+import { sendEmail } from "../../nodemailer.util";
 
 const createUserService = async ({
   address,
@@ -22,6 +24,19 @@ const createUserService = async ({
 
   const user = userRepository.create({ ...dataUser, address: newAddress });
   await userRepository.save(user);
+
+  try {
+    const email: IEmailRequest = {
+      subject: `Bem vindo ${user.name}!`,
+      text: "Parabéns, você acabou de criar uma consta na melhor loja nerd do multiverso",
+      to: user.email,
+      html: '<div style="background-color: red"><h1>Hello</h1></div>',
+    };
+
+    await sendEmail(email);
+  } catch (error) {
+    console.log(error);
+  }
 
   return user;
 };
