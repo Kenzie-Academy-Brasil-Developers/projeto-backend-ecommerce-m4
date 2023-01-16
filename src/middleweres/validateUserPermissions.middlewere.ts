@@ -9,7 +9,7 @@ export const validateUserPermissionsMiddlewere = async (
   const userSession = req.user;
 
   if (!userSession.isAdm && req.params.id !== userSession.id) {
-    throw new AppError("You only able to delete yourself");
+    throw new AppError("You only able to delete yourself", 403);
   }
 
   next();

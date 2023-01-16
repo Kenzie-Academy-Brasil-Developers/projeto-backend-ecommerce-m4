@@ -1,10 +1,11 @@
 import { Orders } from "../../entities/orders.entity";
+import { AppError } from "../../errors/errors";
 import { IOrderResponse } from "../../interfaces/orders.interfaces";
 import { AppDataSource } from "../../__tests__/integration";
 
 const listOrderProductByIdServices = async (
   idOrder: number
-): Promise<IOrderResponse[]> => {
+): Promise<IOrderResponse> => {
   const orderRepository = AppDataSource.getRepository(Orders);
 
   const order = await orderRepository
@@ -12,7 +13,7 @@ const listOrderProductByIdServices = async (
     .innerJoinAndSelect("orders.ordersProducts", "ordersProduct")
     .innerJoinAndSelect("ordersProduct.product", "product")
     .where("orders.id = :id", { id: idOrder })
-    .getMany();
+    .getOne();
 
   return order;
 };

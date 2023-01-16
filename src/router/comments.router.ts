@@ -9,7 +9,7 @@ import { authTokenMiddleware } from "../middleweres/authToken.middlewere";
 import { commentExistsMiddlewere } from "../middleweres/commentExists.middlewere";
 import { validateUserPermissionsMiddlewere } from "../middleweres/validateUserPermissions.middlewere";
 import validatedBodyMiddleware from "../middleweres/validatedData.middleware";
-import {commentsRequestSchema} from "../schemas/comments/comments.schemas"
+import { commentsRequestSchema } from "../schemas/comments/comments.schemas";
 
 export const commentsRouter = Router();
 

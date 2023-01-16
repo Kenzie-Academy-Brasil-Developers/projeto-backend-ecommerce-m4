@@ -1,7 +1,9 @@
 import {
   mockedInvalidIdNumber,
   mockedProductRequest,
+  mockedProductRequest2,
   mockedUserLogin,
+  mockedUserRequest2,
 } from "../../mocks";
 import {
   AppDataSource,
@@ -110,14 +112,14 @@ describe("/orders", () => {
     expect(response.body).toHaveProperty("message");
   });
   it("POST /orders - should not be able to create an order with invalid products", async () => {
-    const user = userRepository.create(mockedUserRequest);
+    const user = userRepository.create(mockedUserRequest2);
     await userRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
+    const product = productRepository.create(mockedProductRequest2);
     await productRepository.save(product);
 
     const response = await request(app)

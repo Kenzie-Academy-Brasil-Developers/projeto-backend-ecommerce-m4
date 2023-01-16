@@ -6,7 +6,7 @@ const productRequestSchema = yup.object().shape({
   price: yup.string().matches(/^\d{1,12}(.\d{1,2})?$/, "Invalid price format"),
   description: yup.string().max(300).required(),
   amount: yup.number().required(),
-  available: yup.boolean().required(),
+  available: yup.boolean(),
 });
 
 const productUpdateRequestSchema = yup.object().shape({

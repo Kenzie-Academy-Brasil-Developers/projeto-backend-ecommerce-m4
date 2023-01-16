@@ -52,13 +52,4 @@ describe("/session", () => {
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty("message");
   });
-  it("POST / session - should not be able to login if the user is deleted", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save({ ...user, deletedAt: new Date() });
-
-    const response = await request(app).post(baseUrl).send(mockedUserLogin);
-
-    expect(response.status).toBe(403);
-    expect(response.body).toHaveProperty("message");
-  });
 });

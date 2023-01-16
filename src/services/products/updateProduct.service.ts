@@ -1,5 +1,6 @@
 import AppDataSource from "../../data-source";
 import { Products } from "../../entities/products.entity";
+import { AppError } from "../../errors/errors";
 import {
   IProductResponse,
   iProductUpdateRequest,
@@ -9,16 +10,24 @@ const updateProductService = async (
   idProduct: number,
   data: iProductUpdateRequest
 ): Promise<IProductResponse> => {
-  const productRespository = AppDataSource.getRepository(Products);
+  const productRepository = AppDataSource.getRepository(Products);
 
-  const product = await productRespository.findOneBy({ id: idProduct });
+  const product = await productRepository.findOneBy({ id: idProduct });
 
-  await productRespository.update(idProduct, {
+  const findProduct = await productRepository.findOneBy({
+    name: data.name,
+  });
+
+  if (findProduct) {
+    throw new AppError("Product already exists", 409);
+  }
+
+  await productRepository.update(idProduct, {
     ...product,
     ...data,
   });
 
-  const productUpdated = await productRespository.findOneBy({ id: idProduct });
+  const productUpdated = await productRepository.findOneBy({ id: idProduct });
 
   return productUpdated;
 };

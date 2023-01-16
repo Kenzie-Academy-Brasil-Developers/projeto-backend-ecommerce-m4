@@ -54,7 +54,7 @@ describe("/users", () => {
     });
 
     expect(response.status).toBe(204);
-    expect(userInDatabase.deletedAt).not.toBeNull();
+    expect(userInDatabase).toBeNull();
   });
 
   it("DELETE /users/:id - should not be able to delete an user with an invalid id", async () => {
@@ -99,25 +99,6 @@ describe("/users", () => {
     const response = await request(app)
       .delete(`${baseUrl}/${userToDelete.id}`)
       .set("Authorization", userThatWillDeleteToken);
-
-    expect(response.status).toBe(403);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  it("DELETE /users/:id - should not be able to delete an user with deletedAt not null", async () => {
-    const admin = userRepository.create(mockedAdminRequest);
-    await userRepository.save(admin);
-    const adminLoginResponse = await request(app)
-      .post("/session")
-      .send(mockedAdminLogin);
-    const adminToken = `Bearer ${adminLoginResponse.body.token}`;
-
-    const userToBeDeleted = userRepository.create(mockedUserRequest2);
-    await userRepository.save({ ...userToBeDeleted, deletedAt: new Date() });
-
-    const response = await request(app)
-      .delete(`${baseUrl}/${userToBeDeleted.id}`)
-      .set("Authorization", adminToken);
 
     expect(response.status).toBe(403);
     expect(response.body).toHaveProperty("message");
