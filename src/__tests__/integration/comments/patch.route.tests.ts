@@ -46,7 +46,7 @@ describe("/products/:id/comments", () => {
     await connection.destroy();
   });
 
-  it("PATCH /products/:id/comments/:id - should be able to update a comment", async () => {
+  it("PATCH /products/comments/:id - should be able to update a comment", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
     const userLoginResponse = await request(app)

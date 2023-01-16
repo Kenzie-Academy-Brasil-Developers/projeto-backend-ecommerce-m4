@@ -10,7 +10,7 @@ export const createOrderController = async (req: Request, res: Response) => {
   const dataOrder: IOrderRequest[] = req.body;
   const orders = await createOrderService(dataOrder, id);
 
-  return res.status(200).json(instanceToPlain(orders));
+  return res.status(201).json(instanceToPlain(orders));
 };
 
 export const updateOrderController = async (req: Request, res: Response) => {

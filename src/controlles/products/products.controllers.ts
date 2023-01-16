@@ -18,7 +18,7 @@ export const createProductController = async (req: Request, res: Response) => {
   const productData: IProductRequest = req.body;
   const newProduct = await createProductsServices(productData);
 
-  return res.status(200).json(newProduct);
+  return res.status(201).json(newProduct);
 };
 
 export const listProductController = async (req: Request, res: Response) => {
@@ -41,5 +41,5 @@ export const deleteProductController = async (req: Request, res: Response) => {
 
   await deleteProductService(idProduct);
 
-  return res.status(200).json();
+  return res.status(204).json();
 };

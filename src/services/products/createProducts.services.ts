@@ -16,7 +16,7 @@ const createProductsServices = async (
   });
 
   if (findProduct) {
-    throw new AppError("Product already exists", 403);
+    throw new AppError("Product already exists", 409);
   }
 
   const product = productRepository.create(productData);

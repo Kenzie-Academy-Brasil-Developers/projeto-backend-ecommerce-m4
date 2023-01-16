@@ -57,7 +57,7 @@ describe("/products", () => {
       id: product.id,
     });
     expect(response.status).toBe(204);
-    expect(dbProductCheck).toBeNull();
+    expect(dbProductCheck.available).toBeFalsy();
   });
   it("DELETE /products/:id - should not be able to soft delete a product without authentication", async () => {
     const product = productRepository.create(mockedProductRequest);
