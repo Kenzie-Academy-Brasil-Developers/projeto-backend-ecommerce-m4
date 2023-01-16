@@ -7,7 +7,7 @@ import listCommentsByIdServices from "../../services/comments/listCommentsById.s
 export const createCommentsController = async (req: Request, res: Response) => {
   const id: number = parseInt(req.params.id);
   const newComments = await createCommentsServices(id, req.body, req.user.id);
-  return res.status(200).json(newComments);
+  return res.status(201).json(newComments);
 };
 
 export const updateCommentsController = async (req: Request, res: Response) => {
@@ -23,11 +23,13 @@ export const deleteCommentsController = async (req: Request, res: Response) => {
 
   await deleteCommentsService(idComment);
 
-  return res.status(200).json();
+  return res.status(204).json();
 };
 
-export const getCommentsByIdProductController = async (  req: Request,res: Response) => {
- 
+export const getCommentsByIdProductController = async (
+  req: Request,
+  res: Response
+) => {
   const id = parseInt(req.params.id);
 
   const commentProduct = await listCommentsByIdServices(id);

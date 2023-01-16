@@ -74,6 +74,10 @@ const mockedUserLogin = {
   email: "user@mail.com",
   password: "1234",
 };
+const mockedUserLogin2 = {
+  email: "pikachu@mail.com",
+  password: "1234",
+};
 
 const mockedUserAddressUpdate = {
   city: "São Paulo",
@@ -182,4 +186,5 @@ export {
   mockedCommentUpdateRequest,
   mockedInvalidCommentUpdateRequest,
   mockedInvalidField,
+  mockedUserLogin2,
 };

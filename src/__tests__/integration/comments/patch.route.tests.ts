@@ -19,7 +19,7 @@ import {
   Comments,
 } from "../index";
 
-describe("/products/:id/comments", () => {
+describe("/products/comments/:id", () => {
   let connection: DataSource;
   const baseUrl = "/products";
   const userRepository = AppDataSource.getRepository(User);
@@ -65,7 +65,7 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .patch(`${baseUrl}/${product.id}/comments/${comment.id}`)
+      .patch(`${baseUrl}/comments/${comment.id}`)
       .set("Authorization", userToken)
       .send(mockedCommentUpdateRequest);
 
@@ -75,7 +75,7 @@ describe("/products/:id/comments", () => {
     );
   });
 
-  it("PATCH /products/:id/comments/:id - should not be able to update a comment without authentication", async () => {
+  it("PATCH /products/comments/:id - should not be able to update a comment without authentication", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
 
@@ -90,14 +90,14 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .patch(`${baseUrl}/${product.id}/comments/${comment.id}`)
+      .patch(`${baseUrl}/comments/${comment.id}`)
       .send(mockedCommentUpdateRequest);
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty("message");
   });
 
-  it("PATCH /products/:id/comments/:id - should not be able to update a comment with invalid product id", async () => {
+  it("PATCH /products/comments/:id - should not be able to update a comment with invalid id", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
     const userLoginResponse = await request(app)
@@ -116,7 +116,7 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .patch(`${baseUrl}/${mockedInvalidIdNumber}/comments/${comment.id}`)
+      .patch(`${baseUrl}/comments/${mockedInvalidIdNumber}`)
       .set("Authorization", userToken)
       .send(mockedCommentUpdateRequest);
 
@@ -124,7 +124,7 @@ describe("/products/:id/comments", () => {
     expect(response.body).toHaveProperty("message");
   });
 
-  it("POST /products/:id/comments/:id - should not be able to update another user comments", async () => {
+  it("PATCH /products/comments/:id - should not be able to update another user comments", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
     const userLoginResponse = await request(app)
@@ -132,9 +132,8 @@ describe("/products/:id/comments", () => {
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const userOwnerOfCommentToBeUpdated =
-      userRepository.create(mockedUserRequest2);
-    await userRepository.save(userOwnerOfCommentToBeUpdated);
+    const userOwnerOfComment = userRepository.create(mockedUserRequest2);
+    await userRepository.save(userOwnerOfComment);
 
     const product = productRepository.create(mockedProductRequest);
     await productRepository.save(product);
@@ -142,12 +141,12 @@ describe("/products/:id/comments", () => {
     const comment = commentsRepository.create({
       ...mockedCommentRequest,
       product,
-      user: userOwnerOfCommentToBeUpdated,
+      user: userOwnerOfComment,
     });
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .patch(`${baseUrl}/${product.id}/comments/${comment.id}`)
+      .patch(`${baseUrl}/comments/${comment.id}`)
       .set("Authorization", userToken)
       .send(mockedCommentUpdateRequest);
 
