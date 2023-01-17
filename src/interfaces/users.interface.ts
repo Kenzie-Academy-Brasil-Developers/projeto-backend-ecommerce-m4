@@ -30,3 +30,8 @@ export interface IUpdateUserRequest {
   password?: string;
   email?: string;
 }
+
+export interface IBodyUser {
+  id: string;
+  isAdm: boolean;
+}
