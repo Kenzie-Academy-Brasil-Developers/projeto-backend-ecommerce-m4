@@ -6,29 +6,35 @@ import {
   getCommentsByIdProductController,
 } from "../controlles/comments/comments.controllers";
 import { authTokenMiddleware } from "../middleweres/authToken.middlewere";
-import { validateUserPermissionsMiddlewere } from "../middleweres/validateUserPermissions.middlewere";
+import { commentExistsMiddlewere } from "../middleweres/commentExists.middlewere";
+import validatedBodyMiddleware from "../middleweres/validatedData.middleware";
+import { commentsRequestSchema } from "../schemas/comments/comments.schemas";
+import { productExistsMiddlewere } from "../middleweres/productExists.middlewere";
 
 export const commentsRouter = Router();
 
 commentsRouter.post(
   "/:id/comments",
   authTokenMiddleware,
+  productExistsMiddlewere,
+  validatedBodyMiddleware(commentsRequestSchema),
   createCommentsController
 );
 commentsRouter.get(
-  "/comments",
-  authTokenMiddleware,
+  "/:id/comments",
+  productExistsMiddlewere,
   getCommentsByIdProductController
 );
 commentsRouter.patch(
   "/comments/:id",
   authTokenMiddleware,
-  validateUserPermissionsMiddlewere,
+  commentExistsMiddlewere,
+  validatedBodyMiddleware(commentsRequestSchema),
   updateCommentsController
 );
 commentsRouter.delete(
   "/comments/:id",
   authTokenMiddleware,
-  validateUserPermissionsMiddlewere,
+  commentExistsMiddlewere,
   deleteCommentsController
 );

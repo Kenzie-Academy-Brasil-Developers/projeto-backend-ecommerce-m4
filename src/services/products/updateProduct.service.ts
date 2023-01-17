@@ -1,42 +1,35 @@
-import { Console } from "console";
 import AppDataSource from "../../data-source";
 import { Products } from "../../entities/products.entity";
 import { AppError } from "../../errors/errors";
-
-interface iProduct {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  amount: number;
-  available: boolean;
-}
-
-interface iProductUpdateRequest {
-  name?: string;
-  description?: string;
-  price?: number;
-  amount?: number;
-  available?: boolean;
-}
+import {
+  IProductResponse,
+  iProductUpdateRequest,
+} from "../../interfaces/products.interfaces";
 
 const updateProductService = async (
   idProduct: number,
   data: iProductUpdateRequest
-): Promise<iProduct> => {
-  const productRespository = AppDataSource.getRepository(Products);
+): Promise<IProductResponse> => {
+  const productRepository = AppDataSource.getRepository(Products);
 
-  const product = await productRespository.findOneBy({ id: idProduct });
+  const product = await productRepository.findOneBy({ id: idProduct });
 
-  await productRespository.update(idProduct, {
-    ...product, 
-    ...data
+  const findProduct = await productRepository.findOneBy({
+    name: data.name,
   });
 
-  const productUpdated = await productRespository.findOneBy({ id: idProduct });
+  if (findProduct) {
+    throw new AppError("Product already exists", 409);
+  }
 
-  return productUpdated
+  await productRepository.update(idProduct, {
+    ...product,
+    ...data,
+  });
 
+  const productUpdated = await productRepository.findOneBy({ id: idProduct });
+
+  return productUpdated;
 };
 
-export default updateProductService
+export default updateProductService;

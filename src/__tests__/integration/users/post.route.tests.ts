@@ -1,3 +1,4 @@
+import { getRounds } from "bcryptjs";
 import {
   AppDataSource,
   DataSource,
@@ -24,8 +25,7 @@ describe("/users", () => {
   });
 
   beforeEach(async () => {
-    const usersData = await userRepository.find();
-    await userRepository.remove(usersData);
+    await userRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -35,15 +35,15 @@ describe("/users", () => {
   it("POST /users - should be able to create an user", async () => {
     const response = await request(app).post(baseUrl).send(mockedUserRequest);
 
+    expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("id");
     expect(response.body).not.toHaveProperty("password");
-    expect(response.status).toBe(201);
 
     const [user, amount] = await userRepository.findAndCountBy({
       id: response.body.id,
     });
     expect(amount).toBe(1);
-    // expect(getRounds(user[0].password)).toBeTruthy();
+    expect(getRounds(user[0].password)).toBeTruthy();
   });
 
   it("POST /users - should not be able to create user with invalid body", async () => {
@@ -51,8 +51,8 @@ describe("/users", () => {
       .post(baseUrl)
       .send(mockedUserInvalidRequest);
 
-    expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty("message");
   });
 
   it("POST /users - should not be able to create an user that already exists", async () => {
@@ -61,7 +61,7 @@ describe("/users", () => {
 
     const response = await request(app).post(baseUrl).send(mockedUserRequest);
 
-    expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(409);
+    expect(response.body).toHaveProperty("message");
   });
 });

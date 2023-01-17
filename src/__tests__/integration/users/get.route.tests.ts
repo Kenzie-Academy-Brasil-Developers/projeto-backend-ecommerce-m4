@@ -26,8 +26,7 @@ describe("/users", () => {
   });
 
   beforeEach(async () => {
-    const usersData = await userRepository.find();
-    await userRepository.remove(usersData);
+    await userRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -46,6 +45,7 @@ describe("/users", () => {
       .get(baseUrl)
       .set("Authorization", adminToken);
 
+    expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("map");
     expect(response.body[0]).not.toHaveProperty("password");
   });
@@ -53,8 +53,8 @@ describe("/users", () => {
   it("GET /users - should not be able to list users without authentication", async () => {
     const response = await request(app).get(baseUrl);
 
-    expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
   });
 
   it("GET /users - should not be able to list users not being admin", async () => {
@@ -69,7 +69,7 @@ describe("/users", () => {
       .get(baseUrl)
       .set("Authorization", userToken);
 
-    expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
   });
 });
