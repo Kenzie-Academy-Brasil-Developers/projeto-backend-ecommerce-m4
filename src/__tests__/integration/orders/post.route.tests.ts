@@ -116,30 +116,6 @@ describe("/orders", () => {
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty("message");
   });
-  it("POST /orders - should not be able to create an order with invalid products", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
-    const userLoginResponse = await request(app)
-      .post("/session")
-      .send(mockedUserLogin);
-    const userToken = `Bearer ${userLoginResponse.body.token}`;
-
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
-
-    const response = await request(app)
-      .post(baseUrl)
-      .set("Authorization", userToken)
-      .send([
-        {
-          product: mockedInvalidIdNumber,
-          amount: 1,
-        },
-      ]);
-
-    expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty("message");
-  });
 
   it("POST /orders - should not be able to create an order if the product amount is out of stock", async () => {
     const user = userRepository.create(mockedUserRequest);
@@ -194,6 +170,28 @@ describe("/orders", () => {
       ]);
 
     expect(response.status).toBe(409);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  it("POST /orders - should not be able to create an order with invalid products", async () => {
+    const user = userRepository.create(mockedUserRequest);
+    await userRepository.save(user);
+    const userLoginResponse = await request(app)
+      .post("/session")
+      .send(mockedUserLogin);
+    const userToken = `Bearer ${userLoginResponse.body.token}`;
+
+    const response = await request(app)
+      .post(baseUrl)
+      .set("Authorization", userToken)
+      .send([
+        {
+          product: mockedInvalidIdNumber,
+          amount: 1,
+        },
+      ]);
+
+    expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("message");
   });
 });
