@@ -19,7 +19,7 @@ export interface IDataUserResponse {
   id: string;
   name: string;
   age: number;
-  password: string;
+  password?: string;
   email: string;
   address: IAdress;
 }

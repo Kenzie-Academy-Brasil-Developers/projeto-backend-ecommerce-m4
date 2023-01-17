@@ -120,8 +120,6 @@ describe("/orders", () => {
       .send(mockedUserLogin2);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    console.log(userToken);
-
     const product = productRepository.create(mockedProductRequest2);
     await productRepository.save(product);
 

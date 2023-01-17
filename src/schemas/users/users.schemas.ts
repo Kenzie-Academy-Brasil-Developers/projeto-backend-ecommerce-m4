@@ -1,37 +1,57 @@
-import * as yup from 'yup'
-import {AnySchema} from 'yup'
+import * as yup from "yup";
+import { AnySchema } from "yup";
 
 const addressSchemaRequest = yup.object().shape({
-    street: yup.string().max(50).required(),
-    city: yup.string().max(50).required(),
-    zipCode: yup.string().max(8).required(),
-    state: yup.string().max(2).required(),
-    number: yup.string().max(40).required()
-})
+  street: yup.string().max(50).required(),
+  city: yup.string().max(50).required(),
+  zipCode: yup.string().max(8).required(),
+  state: yup.string().max(2).required(),
+  number: yup.string().max(40).required(),
+});
 
 const addressUpdateSchemaRequest = yup.object().shape({
-    street: yup.string().max(50),
-    city: yup.string().max(50),
-    zipCode: yup.string().max(8),
-    state: yup.string().max(2),
-    number: yup.string().max(40)
-})
+  street: yup.string().max(50),
+  city: yup.string().max(50),
+  zipCode: yup.string().max(8),
+  state: yup.string().max(2),
+  number: yup.string().max(40),
+});
 
 const userRequestSchema = yup.object().shape({
-    name: yup.string().required(),
-    age: yup.number().required(),
-    email: yup.string().email().required(),
-    password: yup.string().required(),
-    address: addressSchemaRequest.required()
-   
-})    
+  name: yup.string().required(),
+  age: yup.number().required(),
+  email: yup.string().email().required(),
+  password: yup.string().required(),
+  address: addressSchemaRequest.required(),
+});
 
 const userUpdateRequestSchema = yup.object().shape({
-    name: yup.string(),
-    age: yup.number(),
-    email: yup.string().email(),
-    password: yup.string(),
-})  
+  name: yup.string(),
+  age: yup.number(),
+  email: yup.string().email(),
+  password: yup.string(),
+});
 
+const addressUpdateSchemaResponse = yup.object().shape({
+  id: yup.number().required(),
+  street: yup.string().max(50).required(),
+  city: yup.string().max(50).required(),
+  zipCode: yup.string().max(8).required(),
+  state: yup.string().max(2).required(),
+  number: yup.string().max(40).required(),
+});
 
-export {addressSchemaRequest,addressUpdateSchemaRequest, userRequestSchema, userUpdateRequestSchema}
+const userResponseUpdateSchema = yup.object().shape({
+  id: yup.string().required(),
+  name: yup.string().required(),
+  age: yup.number().required(),
+  email: yup.string().email().required(),
+});
+
+export {
+  addressSchemaRequest,
+  addressUpdateSchemaRequest,
+  userRequestSchema,
+  userUpdateRequestSchema,
+  userResponseUpdateSchema,
+};
