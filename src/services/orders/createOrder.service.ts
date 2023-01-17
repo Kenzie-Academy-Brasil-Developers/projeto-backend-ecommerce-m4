@@ -1,4 +1,3 @@
-import { create } from "domain";
 import AppDataSource from "../../data-source";
 import { IEmailRequest } from "../../email.interface";
 import { Orders } from "../../entities/orders.entity";
@@ -6,11 +5,11 @@ import { OrdersProducts } from "../../entities/ordersProducts.entity";
 import { User } from "../../entities/user.entity";
 import { sendEmail } from "../../nodemailer.util";
 
-const createOrderService = async (dataOrder, idUser) => {
+const createOrderService = async (dataOrder:any, idUser:string):Promise<{message:string}>=> {
   const userRepository = AppDataSource.getRepository(User);
   const orderRepository = AppDataSource.getRepository(Orders);
   const orderProductsRepository = AppDataSource.getRepository(OrdersProducts);
-
+  
   const user = await userRepository.findOneBy({ id: idUser });
 
   const newOrder = orderRepository.create({
@@ -19,7 +18,7 @@ const createOrderService = async (dataOrder, idUser) => {
   });
   const ordersCreated = await orderRepository.save(newOrder);
 
-  dataOrder.forEach(async (product) => {
+  dataOrder.forEach(async (product:any) => {
     const newOrdersProduct = orderProductsRepository.create({
       ...product,
       orders: ordersCreated,

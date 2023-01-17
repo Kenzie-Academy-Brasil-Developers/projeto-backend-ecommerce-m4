@@ -4,6 +4,7 @@ import {
   listProductController,
   updateProductController,
   deleteProductController,
+  getProductByIdController,
 } from "../controlles/products/products.controllers";
 import { authTokenMiddleware } from "../middleweres/authToken.middlewere";
 import { isAdmMiddlewere } from "../middleweres/isAdm.Middlewere";
@@ -22,6 +23,8 @@ productRouter.post(
 );
 
 productRouter.get("", listProductController);
+
+productRouter.get("/:id",productExistsMiddlewere,getProductByIdController)
 
 productRouter.patch(
   "/:id",
