@@ -3,6 +3,7 @@ import {
   mockedProductRequest,
   mockedProductRequest2,
   mockedUserLogin,
+  mockedUserLogin2,
   mockedUserRequest2,
 } from "../../mocks";
 import {
@@ -116,8 +117,10 @@ describe("/orders", () => {
     await userRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
-      .send(mockedUserLogin);
+      .send(mockedUserLogin2);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
+
+    console.log(userToken);
 
     const product = productRepository.create(mockedProductRequest2);
     await productRepository.save(product);

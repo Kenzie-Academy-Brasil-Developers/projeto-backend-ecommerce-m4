@@ -21,7 +21,7 @@ import {
   Comments,
 } from "../index";
 
-describe("/products/:id/comments", () => {
+describe("/products/comments/:id", () => {
   let connection: DataSource;
   const baseUrl = "/products";
   const userRepository = AppDataSource.getRepository(User);
@@ -48,7 +48,7 @@ describe("/products/:id/comments", () => {
     await connection.destroy();
   });
 
-  it("DELETE /products/:id/comments/:id - should be able to delete a comment", async () => {
+  it("DELETE /products/comments/:id - should be able to delete a comment", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
     const userLoginResponse = await request(app)
@@ -67,7 +67,7 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .delete(`${baseUrl}/${product.id}/comments/${comment.id}`)
+      .delete(`${baseUrl}/comments/${comment.id}`)
       .set("Authorization", userToken);
 
     const dbCommentCheck = await commentsRepository.findOneBy({
@@ -78,7 +78,7 @@ describe("/products/:id/comments", () => {
     expect(dbCommentCheck).toBeNull();
   });
 
-  it("DELETE /products/:id/comments/:id - should not be able to delete a comment without authentication", async () => {
+  it("DELETE /products/comments/:id - should not be able to delete a comment without authentication", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
 
@@ -93,14 +93,14 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app).delete(
-      `${baseUrl}/${product.id}/comments/${comment.id}`
+      `${baseUrl}/comments/${comment.id}`
     );
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty("message");
   });
 
-  it("DELETE /products/:id/comments/:id - should not be able to delete a comment with invalid product id", async () => {
+  it("DELETE /products/comments/:id - should not be able to delete a comment with invalid id", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
     const userLoginResponse = await request(app)
@@ -119,14 +119,14 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .delete(`${baseUrl}/${mockedInvalidIdNumber}/comments/${comment.id}`)
+      .delete(`${baseUrl}/comments/${mockedInvalidIdNumber}`)
       .set("Authorization", userToken);
 
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("message");
   });
 
-  it("DELETE /products/:id/comments/:id - should not be able to delete another user comments being a normal user", async () => {
+  it("DELETE /products/comments/:id - should not be able to delete another user comments being a normal user", async () => {
     const user = userRepository.create(mockedUserRequest);
     await userRepository.save(user);
     const userLoginResponse = await request(app)
@@ -149,14 +149,14 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .delete(`${baseUrl}/${product.id}/comments/${comment.id}`)
+      .delete(`${baseUrl}/comments/${comment.id}`)
       .set("Authorization", userToken);
 
     expect(response.status).toBe(403);
     expect(response.body).toHaveProperty("message");
   });
 
-  it("DELETE /products/:id/comments/:id - should be able to delete another user comments being an admin", async () => {
+  it("DELETE /products/comments/:id - should be able to delete another user comments being an admin", async () => {
     const admin = userRepository.create(mockedAdminRequest);
     await userRepository.save(admin);
     const adminLoginResponse = await request(app)
@@ -179,7 +179,7 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .delete(`${baseUrl}/${product.id}/comments/${comment.id}`)
+      .delete(`${baseUrl}/comments/${comment.id}`)
       .set("Authorization", adminToken);
 
     const dbCommentCheck = await commentsRepository.findOneBy({

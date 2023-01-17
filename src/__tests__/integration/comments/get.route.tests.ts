@@ -1,4 +1,9 @@
-import { mockedInvalidIdNumber, mockedProductRequest } from "../../mocks";
+import {
+  mockedCommentRequest,
+  mockedInvalidIdNumber,
+  mockedProductRequest,
+  mockedUserRequest,
+} from "../../mocks";
 import {
   AppDataSource,
   DataSource,
@@ -37,20 +42,28 @@ describe("/products/:id/comments", () => {
   });
 
   it("GET /products/:id/comments - should be able to list a product's comments", async () => {
+    const user = userRepository.create(mockedUserRequest);
+    await userRepository.save(user);
+
     const product = productRepository.create(mockedProductRequest);
     await productRepository.save(product);
+
+    const comment = commentsRepository.create({
+      ...mockedCommentRequest,
+      product,
+      user,
+    });
+    await commentsRepository.save(comment);
 
     const response = await request(app).get(
       `${baseUrl}/${product.id}/comments`
     );
 
     expect(response.status).toBe(200);
-    expect(response.body[0]).toHaveProperty("id");
-    expect(response.body[0]).toHaveProperty("comments_text");
-    expect(response.body[0]).toHaveProperty("createdAt");
-    expect(response.body[0]).toHaveProperty("updatedAt");
-    expect(response.body[0].user).toHaveProperty("id");
-    expect(response.body[0].product).toHaveProperty("id");
+    expect(response.body.comments[0]).toHaveProperty("id");
+    expect(response.body.comments[0]).toHaveProperty("comments_text");
+    expect(response.body.comments[0]).toHaveProperty("createdAt");
+    expect(response.body.comments[0]).toHaveProperty("updatedAt");
   });
 
   it("GET /products/:id/comments - should not be able to list a comment with invalid product id", async () => {

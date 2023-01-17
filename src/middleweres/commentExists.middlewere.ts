@@ -7,10 +7,10 @@ export const commentExistsMiddlewere = async (
   res: Response,
   next: NextFunction
 ) => {
-  const commentId = Number(req.params.id)
+  const commentId = Number(req.params.id);
 
-  if(!commentId) {
-    return res.status(404).json({ message: "Comment not found!"});
+  if (!commentId) {
+    return res.status(404).json({ message: "Comment not found!" });
   }
 
   const commentsRepository = AppDataSource.getRepository(Comments);
@@ -22,5 +22,4 @@ export const commentExistsMiddlewere = async (
   }
 
   next();
-  
 };
