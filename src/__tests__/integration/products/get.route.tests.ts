@@ -42,7 +42,7 @@ describe("/products", () => {
     expect(response.body[0]).toHaveProperty("id");
     expect(response.body[0]).toHaveProperty("name");
     expect(response.body[0]).toHaveProperty("price");
-    expect(response.body[0]).toHaveProperty("amount");
+    expect(response.body[0]).toHaveProperty("stock");
   });
   it("GET /products/:id - should be able to list specific product", async () => {
     const product = productRepository.create(mockedProductRequest);
@@ -54,7 +54,7 @@ describe("/products", () => {
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("name");
     expect(response.body).toHaveProperty("price");
-    expect(response.body).toHaveProperty("amount");
+    expect(response.body).toHaveProperty("stock");
   });
   it("GET /products/:id - should not be able to list specific product with invalid Id", async () => {
     const response = await request(app).get(

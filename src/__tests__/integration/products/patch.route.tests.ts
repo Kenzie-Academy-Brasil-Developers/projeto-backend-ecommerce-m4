@@ -61,7 +61,7 @@ describe("/products", () => {
     expect(response.body.name).toBe(mockedProductUpdate.name);
     expect(response.body.description).toBe(mockedProductUpdate.description);
     expect(response.body.price).toBe(mockedProductUpdate.price);
-    expect(response.body.amount).toBe(mockedProductUpdate.amount);
+    expect(response.body.stock).toBe(mockedProductUpdate.stock);
   });
   it("PATCH /products/:id - should not be able to update a product without authentication", async () => {
     const product = productRepository.create(mockedProductRequest);
