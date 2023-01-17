@@ -5,6 +5,7 @@ import deleteProductService from "../../services/products/deleteProduct.service"
 import updateProductService from "../../services/products/updateProduct.service";
 import listProductsServices from "../../services/products/listProducts.services";
 import { IProductRequest } from "../../interfaces/products.interfaces";
+import getProductByIdService from "../../services/products/getProductById.service";
 
 interface iProductUpdateRequest {
   name?: string;
@@ -26,6 +27,14 @@ export const listProductController = async (req: Request, res: Response) => {
 
   return res.json(products);
 };
+
+export const getProductByIdController = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const product = await getProductByIdService(id);
+  
+  return res.json(product);
+  
+}
 
 export const updateProductController = async (req: Request, res: Response) => {
   const idProduct = Number(req.params.id);
