@@ -1,5 +1,4 @@
 import { Orders } from "../../entities/orders.entity";
-import { AppError } from "../../errors/errors";
 import { IOrderResponse } from "../../interfaces/orders.interfaces";
 import { AppDataSource } from "../../__tests__/integration";
 import {ordersRepository} from "../../utils/repositories.ultil"

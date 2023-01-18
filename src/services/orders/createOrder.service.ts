@@ -19,32 +19,37 @@ const createOrderService = async (
     user,
   });
 
-  const ordersCreated = await ordersRepository.save(newOrder);
+  const ordersCreated = await ordersRepository.save(newOrder)
+ 
+  for (let i = 0; i < dataOrder.length; i++) {
+    const product = dataOrder[i];
 
-  dataOrder.forEach(async (products) => {
-    const newOrdersProduct = ordersProductsRepository.create({
-      ...products,
+    const newOrdersProduct = orderProductsRepository.create({
+      ...product,
+
       orders: ordersCreated,
     });
 
     await ordersProductsRepository.save(newOrdersProduct);
 
-    const findProduct = await productsRepository.findOneBy({
-      id: products.product,
+    const findProduct = await productRepository.findOneBy({
+      id: product.product,
     });
 
-    await productsRepository.update(products.product, {
+    await productRepository.update(product.product, {
+
       ...findProduct,
-      amount: findProduct.amount - 1,
+      stock: findProduct.stock - 1,
     });
 
-    if (findProduct.amount === 0) {
-      await productsRepository.update(findProduct.id, {
+
+    if (findProduct.stock === 0) {
+      await productRepository.update(findProduct.id, {
         ...findProduct,
         available: false,
       });
     }
-  });
+  }
 
   try {
     const email: IEmailRequest = {
