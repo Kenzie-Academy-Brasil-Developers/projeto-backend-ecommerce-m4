@@ -6,6 +6,14 @@ export interface IAddressUpdatedRequest {
   number?: string;
 }
 
+export interface IAddressRequest{
+  street: string;
+  city: string;
+  zipCode: string;
+  state: string;
+  number: string;
+}
+
 export interface IAddressUpdatedResponse {
   id: number;
   street: string;

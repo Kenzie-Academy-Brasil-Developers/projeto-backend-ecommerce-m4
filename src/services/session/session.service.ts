@@ -9,7 +9,7 @@ import {
   ISessionResponse,
 } from "../../interfaces/session.interfaces";
 
-export const sessionService = async ({
+const sessionService = async ({
   email,
   password,
 }: ISessionRequest): Promise<ISessionResponse> => {
@@ -38,3 +38,5 @@ export const sessionService = async ({
 
   return { token: token };
 };
+
+export default sessionService

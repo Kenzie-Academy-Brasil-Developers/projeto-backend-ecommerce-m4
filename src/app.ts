@@ -1,13 +1,13 @@
 import "express-async-errors";
 import "reflect-metadata";
 import express       from "express";
-import sessionRouter from "./router/session.routes";
-import productRouter from "./router/product.routes";
-import ordersRouter  from "./router/orders.routes";
-import { UserRouter     } from "./router/users.routes";
-import { commentsRouter } from "./router/comments.routes";
+import sessionRouter from "./routes/session.routes";
+import productRouter from "./routes/product.routes";
+import ordersRouter  from "./routes/orders.routes";
+import UserRouter from "./routes/users.routes";
+import { commentsRouter } from "./routes/comments.routes";
 import { errorHandler   } from "./errors/errors";
-import { addressRouter  } from "./router/address.routes";
+import { addressRouter  } from "./routes/address.routes";
 
 const app = express();
 app.use(express.json());

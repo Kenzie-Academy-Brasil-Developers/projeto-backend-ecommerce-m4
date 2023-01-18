@@ -1,10 +1,10 @@
 import AppDataSource from "../../data-source";
-import { IEmailRequest } from "../../email.interface";
+import { IEmailRequest } from "../../interfaces/email.interface";
 import { Address } from "../../entities/address.entity";
 import { User } from "../../entities/user.entity";
 import { AppError } from "../../errors/errors";
-import { IDataUserRequest } from "../../interfaces/users.interface";
-import { sendEmail } from "../../nodemailer.util";
+import { IDataUserRequest } from "../../interfaces/users.interfaces";
+import { sendEmail } from "../../utils/nodemailer.util";
 
 const createUserService = async ({
   address,
