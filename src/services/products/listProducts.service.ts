@@ -3,7 +3,7 @@ import { IProductResponse } from "../../interfaces/products.interfaces";
 
 const listProductsServices = async (): Promise<IProductResponse[]> => {
 
-  const products = await productRepository
+  const products = await productsRepository
     .createQueryBuilder("products")
     .where("products.stock != 0")
     .andWhere("products.available = true")

@@ -1,8 +1,6 @@
 import {
   AppDataSource,
   DataSource,
-  User,
-  Products,
   app,
   mockedUserRequest,
   request,
@@ -15,13 +13,12 @@ import {
   mockedProductUpdate,
   mockedUserLogin,
 } from "../index";
+import {usersRepository, productsRepository} from "../../../utils/repositories.ultil"
 
 describe("/products", () => {
   let connection: DataSource;
   const baseUrl = "/products";
-  const userRepository = AppDataSource.getRepository(User);
-  const productRepository = AppDataSource.getRepository(Products);
-
+  
   beforeAll(async () => {
     await AppDataSource.initialize()
       .then(async (resp) => {
@@ -33,8 +30,8 @@ describe("/products", () => {
   });
 
   beforeEach(async () => {
-    await userRepository.createQueryBuilder().delete().execute();
-    await productRepository.createQueryBuilder().delete().execute();
+    await usersRepository.createQueryBuilder().delete().execute();
+    await productsRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -42,15 +39,15 @@ describe("/products", () => {
   });
 
   it("PATCH /products/:id - should be able to update a product", async () => {
-    const admin = userRepository.create(mockedAdminRequest);
-    await userRepository.save(admin);
+    const admin = usersRepository.create(mockedAdminRequest);
+    await usersRepository.save(admin);
     const adminLoginResponse = await request(app)
       .post("/session")
       .send(mockedAdminLogin);
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app)
       .patch(`${baseUrl}/${product.id}`)
@@ -64,8 +61,8 @@ describe("/products", () => {
     expect(response.body.stock).toBe(mockedProductUpdate.stock);
   });
   it("PATCH /products/:id - should not be able to update a product without authentication", async () => {
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app)
       .patch(`${baseUrl}/${product.id}`)
@@ -75,15 +72,15 @@ describe("/products", () => {
     expect(response.body).toHaveProperty("message");
   });
   it("PATCH /products/:id - should not be able to update a product without admin permission", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app)
       .patch(`${baseUrl}/${product.id}`)
@@ -94,18 +91,18 @@ describe("/products", () => {
     expect(response.body).toHaveProperty("message");
   });
   it("PATCH /products/:id - should not be able to update a product with a name that already exists", async () => {
-    const admin = userRepository.create(mockedAdminRequest);
-    await userRepository.save(admin);
+    const admin = usersRepository.create(mockedAdminRequest);
+    await usersRepository.save(admin);
     const adminLoginResponse = await request(app)
       .post("/session")
       .send(mockedAdminLogin);
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
-    const productToBeUpdated = productRepository.create(mockedProductRequest2);
-    await productRepository.save(productToBeUpdated);
+    const productToBeUpdated = productsRepository.create(mockedProductRequest2);
+    await productsRepository.save(productToBeUpdated);
 
     const response = await request(app)
       .patch(`${baseUrl}/${productToBeUpdated.id}`)
@@ -116,8 +113,8 @@ describe("/products", () => {
     expect(response.body).toHaveProperty("message");
   });
   it("PATCH /products/:id - should not be able to update with invalid Id", async () => {
-    const admin = userRepository.create(mockedAdminRequest);
-    await userRepository.save(admin);
+    const admin = usersRepository.create(mockedAdminRequest);
+    await usersRepository.save(admin);
     const adminLoginResponse = await request(app)
       .post("/session")
       .send(mockedAdminLogin);

@@ -1,7 +1,6 @@
 import {
   AppDataSource,
   DataSource,
-  User,
   app,
   mockedAdminLogin,
   mockedAdminRequest,
@@ -9,12 +8,12 @@ import {
   mockedUserRequest,
   request,
 } from "../index";
+import {usersRepository} from "../../../utils/repositories.ultil"
 
 describe("/users", () => {
   let connection: DataSource;
   const baseUrl = "/users";
-  const userRepository = AppDataSource.getRepository(User);
-
+  
   beforeAll(async () => {
     await AppDataSource.initialize()
       .then(async (resp) => {
@@ -26,7 +25,7 @@ describe("/users", () => {
   });
 
   beforeEach(async () => {
-    await userRepository.createQueryBuilder().delete().execute();
+    await usersRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -34,8 +33,8 @@ describe("/users", () => {
   });
 
   it("GET /users - should be able to list all users", async () => {
-    const admin = userRepository.create(mockedAdminRequest);
-    await userRepository.save(admin);
+    const admin = usersRepository.create(mockedAdminRequest);
+    await usersRepository.save(admin);
     const adminLoginResponse = await request(app)
       .post("/session")
       .send(mockedAdminLogin);
@@ -58,8 +57,8 @@ describe("/users", () => {
   });
 
   it("GET /users - should not be able to list users not being admin", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);

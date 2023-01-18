@@ -24,7 +24,7 @@ const createOrderService = async (
   for (let i = 0; i < dataOrder.length; i++) {
     const product = dataOrder[i];
 
-    const newOrdersProduct = orderProductsRepository.create({
+    const newOrdersProduct = ordersProductsRepository.create({
       ...product,
 
       orders: ordersCreated,
@@ -32,11 +32,11 @@ const createOrderService = async (
 
     await ordersProductsRepository.save(newOrdersProduct);
 
-    const findProduct = await productRepository.findOneBy({
+    const findProduct = await productsRepository.findOneBy({
       id: product.product,
     });
 
-    await productRepository.update(product.product, {
+    await productsRepository.update(product.product, {
 
       ...findProduct,
       stock: findProduct.stock - 1,
@@ -44,7 +44,7 @@ const createOrderService = async (
 
 
     if (findProduct.stock === 0) {
-      await productRepository.update(findProduct.id, {
+      await productsRepository.update(findProduct.id, {
         ...findProduct,
         available: false,
       });

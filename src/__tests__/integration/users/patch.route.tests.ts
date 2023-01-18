@@ -1,7 +1,6 @@
 import {
   AppDataSource,
   DataSource,
-  User,
   app,
   mockedInvalidId,
   mockedUserUpdate2,
@@ -14,12 +13,12 @@ import {
   mockedUserUpdate,
   request,
 } from "../index";
+import {usersRepository} from "../../../utils/repositories.ultil"
 
 describe("/users", () => {
   let connection: DataSource;
   const baseUrl = "/users";
-  const userRepository = AppDataSource.getRepository(User);
-
+  
   beforeAll(async () => {
     await AppDataSource.initialize()
       .then(async (resp) => {
@@ -31,15 +30,15 @@ describe("/users", () => {
   });
 
   beforeEach(async () => {
-    await userRepository.createQueryBuilder().delete().execute();
+    await usersRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
     await connection.destroy();
   });
   it("PATCH /users/:id - should be able to update an user", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
@@ -56,8 +55,8 @@ describe("/users", () => {
   });
 
   it("PATCH /users/:id - should not be able to update user without authentication", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
 
     const response = await request(app).patch(`/users/${user.id}`);
 
@@ -66,8 +65,8 @@ describe("/users", () => {
   });
 
   it("PATCH /users/:id - should not be able to update user with invalid id", async () => {
-    const admin = userRepository.create(mockedAdminRequest);
-    await userRepository.save(admin);
+    const admin = usersRepository.create(mockedAdminRequest);
+    await usersRepository.save(admin);
     const adminLoginResponse = await request(app)
       .post("/session")
       .send(mockedAdminLogin);
@@ -83,8 +82,8 @@ describe("/users", () => {
   });
 
   it("PATCH /users/:id - should not be able to update isAdm field value", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
@@ -95,15 +94,15 @@ describe("/users", () => {
       .set("Authorization", userToken)
       .send({ isAdm: true });
 
-    const userInDatabase = await userRepository.findOneBy({ id: user.id });
+    const userInDatabase = await usersRepository.findOneBy({ id: user.id });
 
     expect(response.status).toBe(200);
     expect(userInDatabase.isAdm).toBe(false);
   });
 
   it("PATCH /users/:id - should not be able to update user id", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
@@ -114,22 +113,22 @@ describe("/users", () => {
       .set("Authorization", userToken)
       .send({ id: mockedInvalidId });
 
-    const userInDatabase = await userRepository.findOneBy({ id: user.id });
+    const userInDatabase = await usersRepository.findOneBy({ id: user.id });
 
     expect(response.status).toBe(200);
     expect(userInDatabase.id).toBe(user.id);
   });
 
   it("PATCH /users/:id - should not be able to update another user without adm permission", async () => {
-    const userThatWillUpdate = userRepository.create(mockedUserRequest);
-    await userRepository.save(userThatWillUpdate);
+    const userThatWillUpdate = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(userThatWillUpdate);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userThatWillUpdateToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const userToUpdate = userRepository.create(mockedUserRequest2);
-    await userRepository.save(userToUpdate);
+    const userToUpdate = usersRepository.create(mockedUserRequest2);
+    await usersRepository.save(userToUpdate);
 
     const response = await request(app)
       .patch(`${baseUrl}/${userToUpdate.id}`)
@@ -141,15 +140,15 @@ describe("/users", () => {
   });
 
   it("PATCH /users/:id - should not be able to update to an email that already exists", async () => {
-    const userThatWillUpdate = userRepository.create(mockedUserRequest);
-    await userRepository.save(userThatWillUpdate);
+    const userThatWillUpdate = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(userThatWillUpdate);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userThatWillUpdateToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const secondUser = userRepository.create(mockedUserRequest2);
-    await userRepository.save(secondUser);
+    const secondUser = usersRepository.create(mockedUserRequest2);
+    await usersRepository.save(secondUser);
 
     const response = await request(app)
       .patch(`${baseUrl}/${userThatWillUpdate.id}`)
@@ -161,8 +160,8 @@ describe("/users", () => {
   });
 
   it("PATCH /address - should be able to update user address", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
