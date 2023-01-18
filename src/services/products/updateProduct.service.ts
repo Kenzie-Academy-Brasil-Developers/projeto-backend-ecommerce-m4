@@ -14,12 +14,16 @@ const updateProductService = async (
 
   const product = await productRepository.findOneBy({ id: idProduct });
 
-  const findProduct = await productRepository.findOneBy({
-    name: data.name,
-  });
+  if(data.name){
 
-  if (findProduct) {
-    throw new AppError("Product already exists", 409);
+    const findProduct = await productRepository.find({
+      where: {name: data.name}
+    });
+
+    if(findProduct.length > 1) {
+      throw new AppError("Product already exists", 409);
+    } 
+
   }
 
   await productRepository.update(idProduct, {

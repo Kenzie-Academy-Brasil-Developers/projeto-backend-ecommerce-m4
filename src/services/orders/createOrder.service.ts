@@ -35,7 +35,7 @@ const createOrderService = async (dataOrder: any, idUser:string):Promise<{messag
     await productRepository.update(products.product, {...findProduct, amount: findProduct.amount - 1})
 
     if(findProduct.amount === 0){
-      await productRepository.update(products.product, {...findProduct, available: false})
+      await productRepository.update(findProduct.id, {...findProduct, available: false})
     }
 
   })
