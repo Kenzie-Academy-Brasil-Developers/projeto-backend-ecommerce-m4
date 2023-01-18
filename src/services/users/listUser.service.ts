@@ -1,6 +1,6 @@
 import AppDataSource from "../../data-source";
 import { User } from "../../entities/user.entity";
-import { IDataUserResponse } from "../../interfaces/users.interface";
+import { IDataUserResponse } from "../../interfaces/users.interfaces";
 
 const listUserIDService = async (
   idUser: string

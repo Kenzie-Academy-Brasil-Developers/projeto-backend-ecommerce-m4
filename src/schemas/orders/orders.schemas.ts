@@ -1,7 +1,8 @@
 import * as yup from "yup";
-import { AnySchema } from "yup";
+import { SchemaOf } from "yup";
+import { IOrderRequest } from "../../interfaces/orders.interfaces";
 
-const ordersProductSchema = yup.object().shape({
+const ordersProductSchema: SchemaOf<IOrderRequest> = yup.object().shape({
   product: yup.number().required(),
   amount: yup.number().required(),
 });

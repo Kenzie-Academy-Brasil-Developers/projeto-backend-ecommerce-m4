@@ -1,5 +1,5 @@
 import { IProductResponse } from "./products.interfaces";
-import { IDataUserResponse } from "./users.interface";
+import { IDataUserResponse } from "./users.interfaces";
 
 export interface ICommentsRequest {
   comments_text: string;

@@ -1,7 +1,8 @@
 import * as yup from 'yup'
-import {AnySchema} from 'yup'
+import { SchemaOf } from 'yup'
+import { ICommentsRequest } from '../../interfaces/comments.interfaces'
 
-const commentsRequestSchema = yup.object().shape({
+const commentsRequestSchema: SchemaOf<ICommentsRequest> = yup.object().shape({
     comments_text:yup.string().max(500).required()
 })
 
