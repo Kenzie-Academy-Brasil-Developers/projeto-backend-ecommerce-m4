@@ -11,7 +11,7 @@ export class OrdersProducts {
   amount: number;
 
   @ManyToOne(() => Products, (orders) => orders.ordersProduct)
-  product: Products[];
+  product: Products;
 
   @ManyToOne(() => Orders, (orders) => orders.ordersProducts)
   orders: Orders;
