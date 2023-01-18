@@ -31,11 +31,16 @@
   "scripts": {
     "dev": "ts-node-dev --ignore-watch node_modules src/server.ts",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migration:generate": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate ./src/migrations/default",
+
+    "migration:generate": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate",
     "migration:run": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run",
+    
+
+    
     "test": "cross-env NODE_ENV=test SECRETKEY=1234 jest --verbose --silent",
     "build": "tsc",
     "start": "node dist/src/server.js"
+
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

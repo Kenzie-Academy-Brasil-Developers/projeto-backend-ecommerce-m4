@@ -4,6 +4,8 @@ import createOrderService from "../../services/orders/createOrder.service";
 import { orderUpdatedService } from "../../services/orders/updateOrder.services";
 import listOrderProductServices from "../../services/orders/listOrderProduct.services";
 import { IOrderRequest } from "../../interfaces/orders.interfaces";
+import listAllOrdersService from "../../services/orders/listAllOrders.service";
+import listProductsOrderUserService from "../../services/orders/listProductsOderUser.service";
 
 export const createOrderController = async (req: Request, res: Response) => {
   const id: string = req.user.id;
@@ -12,6 +14,23 @@ export const createOrderController = async (req: Request, res: Response) => {
 
   return res.status(201).json(instanceToPlain(orders));
 };
+
+export const listAllOrdersController = async(req: Request, res: Response) => {
+
+  const orderList = await listAllOrdersService()
+
+  return res.status(200).json(orderList)
+
+}
+
+export const listProductsOrderUserController = async (req: Request, res: Response) => {
+
+  const idUser = req.user.id
+  const listOrderProducts = await listProductsOrderUserService(idUser)
+
+  return res.status(200).json(listOrderProducts)
+
+}
 
 export const updateOrderController = async (req: Request, res: Response) => {
   const orderId: number = +req.params.id;
