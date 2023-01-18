@@ -160,4 +160,24 @@ describe("/users", () => {
     expect(response.body.number).toBe(mockedUserAddressUpdate.number);
     expect(response.body.zipCode).toBe(mockedUserAddressUpdate.zipCode);
   });
+
+  it("PATCH /users/:id - should not be able to update to an email that already exists", async () => {
+    const userThatWillUpdate = userRepository.create(mockedUserRequest);
+    await userRepository.save(userThatWillUpdate);
+    const userLoginResponse = await request(app)
+      .post("/session")
+      .send(mockedUserLogin);
+    const userThatWillUpdateToken = `Bearer ${userLoginResponse.body.token}`;
+
+    const secondUser = userRepository.create(mockedUserRequest2);
+    await userRepository.save(secondUser);
+
+    const response = await request(app)
+      .patch(`${baseUrl}/${userThatWillUpdate.id}`)
+      .set("Authorization", userThatWillUpdateToken)
+      .send({ email: secondUser.email });
+
+    expect(response.status).toBe(409);
+    expect(response.body).toHaveProperty("message");
+  });
 });

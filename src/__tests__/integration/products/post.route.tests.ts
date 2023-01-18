@@ -57,7 +57,7 @@ describe("/products", () => {
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("name");
     expect(response.body).toHaveProperty("price");
-    expect(response.body).toHaveProperty("amount");
+    expect(response.body).toHaveProperty("stock");
     expect(response.body).toHaveProperty("available");
     const [product, amount] = await productRepository.findAndCountBy({
       id: response.body.id,

@@ -101,21 +101,21 @@ const mockedProductRequest = {
   name: "Boneco Goku",
   description: "Action figure",
   price: 12.5,
-  amount: 2,
+  stock: 2,
 };
 
 const mockedProductRequest2 = {
   name: "Boneco sasuke",
   description: "Action figure",
   price: 12.5,
-  amount: 2,
+  stock: 2,
 };
 
 const mockedProductUpdate = {
   name: "Boneco Naruto",
   description: "Action figure melhor ainda",
   price: 25.0,
-  amount: 4,
+  stock: 4,
 };
 
 const mockedCommentRequest = {
