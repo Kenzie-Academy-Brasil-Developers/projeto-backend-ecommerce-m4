@@ -79,22 +79,22 @@ ________________________________________________________________________________
 **Response:**
 ````
 [
-  {
-      "name": string,
-      "email": email,
-      "age": number,
-      "address": {
-          "id": number,
-          "street": string,
-          "city": string,
-          "state": string,
-          "zipCode": string,
-          "number": string
-      },
-      "id": string,
-      "createdAt": Date,
-      "updatedAt": Date
-   }
+	{
+		"id": string,
+		"name": string,
+		"email": string,
+		"age": number,
+		"createdAt": date,
+		"updatedAt": date,
+		"address": {
+			"id": number,
+			"street": string,
+			"city": string,
+			"state": string,
+			"zipCode": string,
+			"number": string
+		}
+	}
 ]
 
 ````
@@ -102,26 +102,26 @@ ________________________________________________________________________________
 
 🔵 **GET - /users/id-User**
 
-* Rota para listar usuário específico.
+* Rota para listar usuário específico. (**Rota para admin**)
 
 **Response:**
  ````
 {
-  "name": string,
-  "email": email,
-  "age": number,
-  "address": {
-      "id": number,
-      "street": string,
-      "city": string,
-      "state": string,
-      "zipCode": string,
-      "number": string
-  },
-  "id": string,
-  "createdAt": Date,
-  "updatedAt": Date
-}
+		"id": string,
+		"name": string,
+		"email": string,
+		"age": number,
+		"createdAt": date,
+		"updatedAt": date,
+		"address": {
+			"id": number,
+			"street": string,
+			"city": string,
+			"state": string,
+			"zipCode": string,
+			"number": string
+		}
+	}
 ````
 
 _______________________________________________________________________________________________________________________________________________________________________
@@ -142,20 +142,14 @@ ________________________________________________________________________________
 **Response:**
  ````
 {
-  "name": string,
-  "email": email,
-  "age": number,
-  "address": {
-      "id": number,
-      "street": string,
-      "city": string,
-      "state": string,
-      "zipCode": string,
-      "number": string
-  },
-  "id": string,
-  "createdAt": Date,
-  "updatedAt": Date
+	"id": string,
+	"name": string,
+	"email": string,
+	"age": number,
+	"createdAt": date,
+	"updatedAt": date,
+	"isAdm": boolean,
+	"deletedAt": date | null
 }
 ````
 _______________________________________________________________________________________________________________________________________________________________________
@@ -424,17 +418,35 @@ ________________________________________________________________________________
 
 **Request:**
 ````
-{
+[
+ {
   "product": number,
   "amount": number    
-}
+ }
+]
+
 ````
 
 **Response:**
 ````
 {message: string}
 ````
+_______________________________________________________________________________________________________________________________________________________________________
 
+🔵 **GET - /orders**
+
+*  Lista todos os pedidos 
+
+**Response:**
+````
+[
+	{
+		"id": number,
+		"orderedAt": date,
+		"delivered": boolean
+	}
+]
+````
 _______________________________________________________________________________________________________________________________________________________________________
 
 🔵 **GET - /orders/id-order**
