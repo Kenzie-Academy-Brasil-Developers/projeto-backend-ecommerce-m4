@@ -1,34 +1,27 @@
 import {
   mockedInvalidIdNumber,
   mockedProductRequest,
-  mockedProductRequest2,
-  mockedUserLogin,
-  mockedUserLogin2,
-  mockedUserRequest2,
+  mockedUserLogin
 } from "../../mocks";
 import {
   AppDataSource,
   DataSource,
-  User,
   app,
   mockedUserRequest,
-  request,
-  Products,
-  Orders,
-  OrdersProducts,
-  Comments,
-  Address,
+  request
 } from "../index";
+import {
+  usersRepository,
+  productsRepository,
+  ordersProductsRepository,
+  ordersRepository,
+  commentsRepository
+} from "../../../utils/repositories.ultil";
 
 describe("/orders", () => {
   let connection: DataSource;
   const baseUrl = "/orders";
-  const userRepository = AppDataSource.getRepository(User);
-  const productRepository = AppDataSource.getRepository(Products);
-  const ordersRepository = AppDataSource.getRepository(Orders);
-  const ordersProductsRepository = AppDataSource.getRepository(OrdersProducts);
-  const commentsRepository = AppDataSource.getRepository(Comments);
-
+  
   beforeAll(async () => {
     await AppDataSource.initialize()
       .then(async (resp) => {
@@ -43,8 +36,8 @@ describe("/orders", () => {
     await commentsRepository.createQueryBuilder().delete().execute();
     await ordersProductsRepository.createQueryBuilder().delete().execute();
     await ordersRepository.createQueryBuilder().delete().execute();
-    await productRepository.createQueryBuilder().delete().execute();
-    await userRepository.createQueryBuilder().delete().execute();
+    await productsRepository.createQueryBuilder().delete().execute();
+    await usersRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -52,15 +45,15 @@ describe("/orders", () => {
   });
 
   it("POST /orders - should be able to create an order", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app)
       .post(baseUrl)
@@ -78,8 +71,8 @@ describe("/orders", () => {
     expect(allOrders.length).toBe(1);
   });
   it("POST /orders - should not be able to create an order without authentication", async () => {
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app)
       .post(baseUrl)
@@ -94,15 +87,15 @@ describe("/orders", () => {
     expect(response.body).toHaveProperty("message");
   });
   it("POST /orders - should not be able to create an order with invalid data", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app)
       .post(baseUrl)
@@ -118,15 +111,15 @@ describe("/orders", () => {
   });
 
   it("POST /orders - should not be able to create an order if the product amount is out of stock", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app)
       .post(baseUrl)
@@ -143,21 +136,21 @@ describe("/orders", () => {
   });
 
   it("POST /orders - should not be able to create an order if the product isn't available", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const product = productRepository.create({
+    const product = productsRepository.create({
       name: "Boneco troll",
       description: "Action figure",
       price: 12.5,
       stock: 10,
       available: false,
     });
-    await productRepository.save(product);
+    await productsRepository.save(product);
 
     const response = await request(app)
       .post(baseUrl)
@@ -174,8 +167,8 @@ describe("/orders", () => {
   });
 
   it("POST /orders - should not be able to create an order with invalid products", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);

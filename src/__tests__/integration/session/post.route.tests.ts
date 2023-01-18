@@ -1,19 +1,18 @@
 import {
   AppDataSource,
   DataSource,
-  User,
   app,
   request,
   mockedUserLogin,
   mockedUserRequest,
   mockedInvalidUserLogin,
 } from "../index";
+import {usersRepository} from "../../../utils/repositories.ultil"
 
 describe("/session", () => {
   let connection: DataSource;
   const baseUrl = "/session";
-  const userRepository = AppDataSource.getRepository(User);
-
+  
   beforeAll(async () => {
     await AppDataSource.initialize()
       .then(async (resp) => {
@@ -25,7 +24,7 @@ describe("/session", () => {
   });
 
   beforeEach(async () => {
-    await userRepository.createQueryBuilder().delete().execute();
+    await usersRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -33,8 +32,8 @@ describe("/session", () => {
   });
 
   it("POST / session - should be able to login", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
 
     const response = await request(app).post(baseUrl).send(mockedUserLogin);
 
@@ -42,8 +41,8 @@ describe("/session", () => {
     expect(response.body).toHaveProperty("token");
   });
   it("POST / session - should not be able to login with incorrect password or email", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
 
     const response = await request(app)
       .post(baseUrl)

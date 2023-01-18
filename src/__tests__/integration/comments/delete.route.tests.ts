@@ -2,9 +2,6 @@ import {
   mockedAdminLogin,
   mockedAdminRequest,
   mockedCommentRequest,
-  mockedCommentUpdateRequest,
-  mockedInvalidCommentRequest,
-  mockedInvalidCommentUpdateRequest,
   mockedInvalidIdNumber,
   mockedProductRequest,
   mockedUserLogin,
@@ -13,20 +10,19 @@ import {
 import {
   AppDataSource,
   DataSource,
-  User,
   app,
   mockedUserRequest,
-  request,
-  Products,
-  Comments,
+  request
 } from "../index";
+import {
+  usersRepository,
+  productsRepository,
+  commentsRepository,
+} from "../../../utils/repositories.ultil";
 
 describe("/products/comments/:id", () => {
   let connection: DataSource;
   const baseUrl = "/products";
-  const userRepository = AppDataSource.getRepository(User);
-  const productRepository = AppDataSource.getRepository(Products);
-  const commentsRepository = AppDataSource.getRepository(Comments);
 
   beforeAll(async () => {
     await AppDataSource.initialize()
@@ -40,8 +36,8 @@ describe("/products/comments/:id", () => {
 
   beforeEach(async () => {
     await commentsRepository.createQueryBuilder().delete().execute();
-    await productRepository.createQueryBuilder().delete().execute();
-    await userRepository.createQueryBuilder().delete().execute();
+    await productsRepository.createQueryBuilder().delete().execute();
+    await usersRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -49,15 +45,15 @@ describe("/products/comments/:id", () => {
   });
 
   it("DELETE /products/comments/:id - should be able to delete a comment", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const comment = commentsRepository.create({
       ...mockedCommentRequest,
@@ -79,11 +75,11 @@ describe("/products/comments/:id", () => {
   });
 
   it("DELETE /products/comments/:id - should not be able to delete a comment without authentication", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const comment = commentsRepository.create({
       ...mockedCommentRequest,
@@ -101,15 +97,15 @@ describe("/products/comments/:id", () => {
   });
 
   it("DELETE /products/comments/:id - should not be able to delete a comment with invalid id", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const comment = commentsRepository.create({
       ...mockedCommentRequest,
@@ -127,19 +123,19 @@ describe("/products/comments/:id", () => {
   });
 
   it("DELETE /products/comments/:id - should not be able to delete another user comments being a normal user", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
     const userOwnerOfCommentToBeDeleted =
-      userRepository.create(mockedUserRequest2);
-    await userRepository.save(userOwnerOfCommentToBeDeleted);
+      usersRepository.create(mockedUserRequest2);
+    await usersRepository.save(userOwnerOfCommentToBeDeleted);
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const comment = commentsRepository.create({
       ...mockedCommentRequest,
@@ -157,19 +153,19 @@ describe("/products/comments/:id", () => {
   });
 
   it("DELETE /products/comments/:id - should be able to delete another user comments being an admin", async () => {
-    const admin = userRepository.create(mockedAdminRequest);
-    await userRepository.save(admin);
+    const admin = usersRepository.create(mockedAdminRequest);
+    await usersRepository.save(admin);
     const adminLoginResponse = await request(app)
       .post("/session")
       .send(mockedAdminLogin);
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
 
     const userOwnerOfCommentToBeDeleted =
-      userRepository.create(mockedUserRequest);
-    await userRepository.save(userOwnerOfCommentToBeDeleted);
+      usersRepository.create(mockedUserRequest);
+    await usersRepository.save(userOwnerOfCommentToBeDeleted);
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const comment = commentsRepository.create({
       ...mockedCommentRequest,

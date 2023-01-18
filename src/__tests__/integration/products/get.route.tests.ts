@@ -1,5 +1,4 @@
 import {
-  Products,
   AppDataSource,
   DataSource,
   app,
@@ -7,12 +6,12 @@ import {
   mockedInvalidIdNumber,
   mockedProductRequest,
 } from "../index";
+import {productsRepository} from "../../../utils/repositories.ultil"
 
 describe("/products", () => {
   let connection: DataSource;
   const baseUrl = "/products";
-  const productRepository = AppDataSource.getRepository(Products);
-
+  
   beforeAll(async () => {
     await AppDataSource.initialize()
       .then(async (resp) => {
@@ -24,7 +23,7 @@ describe("/products", () => {
   });
 
   beforeEach(async () => {
-    await productRepository.createQueryBuilder().delete().execute();
+    await productsRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -32,8 +31,8 @@ describe("/products", () => {
   });
 
   it("GET /products - should be able to list all products", async () => {
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app).get(baseUrl);
 
@@ -45,8 +44,8 @@ describe("/products", () => {
     expect(response.body[0]).toHaveProperty("stock");
   });
   it("GET /products/:id - should be able to list specific product", async () => {
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app).get(`${baseUrl}/${product.id}`);
 
