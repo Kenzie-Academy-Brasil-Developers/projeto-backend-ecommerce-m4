@@ -3,11 +3,13 @@ import createCommentsServices from "../../services/comments/createComments.servi
 import updatedCommentsServices from "../../services/comments/updatedComments.service";
 import deleteCommentsService from "../../services/comments/deleteComments.service";
 import listCommentsByIdServices from "../../services/comments/listCommentsById.service";
+import { instanceToPlain } from "class-transformer";
 
 const createCommentsController = async (req: Request, res: Response) => {
   const id: number = parseInt(req.params.id);
   const newComments = await createCommentsServices(id, req.body, req.user.id);
-  return res.status(201).json(newComments);
+
+  return res.status(201).json(instanceToPlain(newComments));
 };
 
 const updateCommentsController = async (req: Request, res: Response) => {
@@ -19,7 +21,7 @@ const updateCommentsController = async (req: Request, res: Response) => {
     req.user.id
   );
 
-  return res.status(200).json(updatedComment);
+  return res.status(200).json(instanceToPlain(updatedComment));
 };
 
 const deleteCommentsController = async (req: Request, res: Response) => {

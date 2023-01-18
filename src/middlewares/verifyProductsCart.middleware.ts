@@ -1,12 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import {productsRepository} from "../utils/repositories.ultil"
+import { productsRepository } from "../utils/repositories.ultil";
 
 const verifyProductCartMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-
   for (let i = 0; i < req.body.length; i++) {
     const order = await productsRepository.findOneBy({
       id: req.body[i].product,
