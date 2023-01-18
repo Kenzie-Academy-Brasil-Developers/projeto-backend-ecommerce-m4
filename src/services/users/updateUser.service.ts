@@ -7,7 +7,6 @@ const upadateUserService = async (
   userId: string,
   dataUser: IUpdateUserRequest
 ) => {
-  
   const user = await usersRepository.findOneBy({ id: userId });
   if (!user) {
     throw new AppError("User not found");

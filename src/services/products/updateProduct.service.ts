@@ -9,7 +9,6 @@ const updateProductService = async (
   idProduct: number,
   data: iProductUpdateRequest
 ): Promise<IProductResponse> => {
-  
   const product = await productsRepository.findOneBy({ id: idProduct });
 
   if (data.name) {
@@ -27,6 +26,7 @@ const updateProductService = async (
   });
 
   const productUpdated = await productsRepository.findOneBy({ id: idProduct });
+  productUpdated.price = +productUpdated.price;
 
   return productUpdated;
 };
