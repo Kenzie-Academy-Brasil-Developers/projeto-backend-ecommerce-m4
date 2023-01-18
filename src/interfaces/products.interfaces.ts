@@ -2,7 +2,7 @@ export interface IProductRequest {
   name: string;
   description: string;
   price: number;
-  amount: number;
+  stock: number;
 }
 
 export interface IProductResponse {
@@ -10,7 +10,7 @@ export interface IProductResponse {
   name: string;
   description: string;
   price: number;
-  amount: number;
+  stock: number;
   available: boolean;
 }
 
@@ -18,6 +18,6 @@ export interface iProductUpdateRequest {
   name?: string;
   description?: string;
   price?: number;
-  amount?: number;
+  stock?: number;
   available?: boolean;
 }

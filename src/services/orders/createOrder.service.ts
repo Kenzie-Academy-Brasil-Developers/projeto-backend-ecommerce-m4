@@ -13,10 +13,7 @@ const createOrderService = async (
   const userRepository = AppDataSource.getRepository(User);
   const orderRepository = AppDataSource.getRepository(Orders);
   const orderProductsRepository = AppDataSource.getRepository(OrdersProducts);
-<<<<<<< HEAD
-=======
   const productRepository = AppDataSource.getRepository(Products);
->>>>>>> 061a5f71cbd2c20acf6ee82dc5bff5534c17741b
 
   const user = await userRepository.findOneBy({ id: idUser });
 
@@ -27,34 +24,32 @@ const createOrderService = async (
 
   const ordersCreated = await orderRepository.save(newOrder);
 
-<<<<<<< HEAD
-  dataOrder.forEach(async (product: any) => {
-=======
-  dataOrder.forEach(async (products) => {
->>>>>>> 061a5f71cbd2c20acf6ee82dc5bff5534c17741b
+  for (let i = 0; i < dataOrder.length; i++) {
+    const product = dataOrder[i];
+
     const newOrdersProduct = orderProductsRepository.create({
-      ...products,
+      ...product,
       orders: ordersCreated,
     });
 
     await orderProductsRepository.save(newOrdersProduct);
 
     const findProduct = await productRepository.findOneBy({
-      id: products.product,
+      id: product.product,
     });
 
-    await productRepository.update(products.product, {
+    await productRepository.update(product.product, {
       ...findProduct,
-      amount: findProduct.amount - 1,
+      stock: findProduct.stock - 1,
     });
 
-    if (findProduct.amount === 0) {
+    if (findProduct.stock === 0) {
       await productRepository.update(findProduct.id, {
         ...findProduct,
         available: false,
       });
     }
-  });
+  }
 
   try {
     const email: IEmailRequest = {
