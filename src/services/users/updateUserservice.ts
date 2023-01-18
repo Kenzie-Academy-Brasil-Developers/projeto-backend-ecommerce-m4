@@ -2,11 +2,7 @@ import { hashSync } from "bcryptjs";
 import AppDataSource from "../../data-source";
 import { User } from "../../entities/user.entity";
 import { AppError } from "../../errors/errors";
-import {
-  IDataUserResponse,
-  IUpdateUserRequest,
-} from "../../interfaces/users.interface";
-import { userResponseUpdateSchema } from "../../schemas/users/users.schemas";
+import { IUpdateUserRequest } from "../../interfaces/users.interface";
 
 const upadateUserService = async (
   userId: string,
