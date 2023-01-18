@@ -5,7 +5,7 @@ import {
   getAllUsersController,
   getUserByIdController,
   updateUserController,
-} from "../controlles/users/user.controllers";
+} from "../controller/users/user.controllers";
 import { authTokenMiddleware } from "../middleweres/authToken.middlewere";
 import { isAdmMiddlewere } from "../middleweres/isAdm.Middlewere";
 import { userExistsMiddlewere } from "../middleweres/userExists.middlewere";

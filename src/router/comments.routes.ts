@@ -1,15 +1,15 @@
-import { Router } from "express";
+import { Router                  } from "express";
+import { authTokenMiddleware     } from "../middleweres/authToken.middlewere";
+import { commentExistsMiddlewere } from "../middleweres/commentExists.middlewere";
+import { commentsRequestSchema   } from "../schemas/comments/comments.schemas";
+import { productExistsMiddlewere } from "../middleweres/productExists.middlewere";
+import validatedBodyMiddleware     from "../middleweres/validatedData.middleware";
 import {
   createCommentsController,
   deleteCommentsController,
   updateCommentsController,
   getCommentsByIdProductController,
-} from "../controlles/comments/comments.controllers";
-import { authTokenMiddleware } from "../middleweres/authToken.middlewere";
-import { commentExistsMiddlewere } from "../middleweres/commentExists.middlewere";
-import validatedBodyMiddleware from "../middleweres/validatedData.middleware";
-import { commentsRequestSchema } from "../schemas/comments/comments.schemas";
-import { productExistsMiddlewere } from "../middleweres/productExists.middlewere";
+} from "../controller/comments/comments.controllers";
 
 export const commentsRouter = Router();
 

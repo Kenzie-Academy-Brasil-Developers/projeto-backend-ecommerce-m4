@@ -5,7 +5,7 @@ import {
   listOrderProductController,
   listProductsOrderUserController,
   updateOrderController,
-} from "../controlles/orders/orders.controllers";
+} from "../controller/orders/orders.controllers"
 import { authTokenMiddleware } from "../middleweres/authToken.middlewere";
 import { isAdmMiddlewere } from "../middleweres/isAdm.Middlewere";
 import { orderExistsMiddlewere } from "../middleweres/orderExists.middleware";
@@ -23,16 +23,18 @@ ordersRouter.post(
   createOrderController
 );
 
-ordersRouter.get('', 
-  authTokenMiddleware, 
-  isAdmMiddlewere, 
+ordersRouter.get(
+  "",
+  authTokenMiddleware,
+  isAdmMiddlewere,
   listAllOrdersController
-)
+);
 
-ordersRouter.get('/products/user',
-  authTokenMiddleware, 
+ordersRouter.get(
+  "/products/user",
+  authTokenMiddleware,
   listProductsOrderUserController
-)
+);
 
 ordersRouter.patch(
   "/:id",
