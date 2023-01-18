@@ -2,11 +2,7 @@ import { hashSync } from "bcryptjs";
 import AppDataSource from "../../data-source";
 import { User } from "../../entities/user.entity";
 import { AppError } from "../../errors/errors";
-import {
-  IDataUserResponse,
-  IUpdateUserRequest,
-} from "../../interfaces/users.interface";
-import { userResponseUpdateSchema } from "../../schemas/users/users.schemas";
+import { IUpdateUserRequest } from "../../interfaces/users.interface";
 
 const upadateUserService = async (
   userId: string,
@@ -16,6 +12,16 @@ const upadateUserService = async (
   const user = await userRepository.findOneBy({ id: userId });
   if (!user) {
     throw new AppError("User not found");
+  }
+
+  if (dataUser.email) {
+    const findUser = await userRepository.findOneBy({
+      email: dataUser.email,
+    });
+
+    if (findUser && findUser.id !== user.id) {
+      throw new AppError("User already exists", 409);
+    }
   }
 
   const updatedUser = { ...user, ...dataUser };
