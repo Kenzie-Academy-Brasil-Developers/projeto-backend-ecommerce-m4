@@ -1,7 +1,6 @@
 import { IProductResponse } from "./products.interfaces";
 
 export interface IOrderRequest {
-  orders: any;
   product: number;
   amount: number;
 }

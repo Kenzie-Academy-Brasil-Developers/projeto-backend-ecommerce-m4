@@ -10,6 +10,7 @@ import listProductsOrderUserService from "../../services/orders/listProductsOder
 export const createOrderController = async (req: Request, res: Response) => {
   const id: string = req.user.id;
   const dataOrder: IOrderRequest[] = req.body;
+
   const orders = await createOrderService(dataOrder, id);
 
   return res.status(201).json(instanceToPlain(orders));
