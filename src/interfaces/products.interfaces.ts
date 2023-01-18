@@ -1,7 +1,7 @@
 export interface IProductRequest {
   name: string;
   description: string;
-  price: number | string;
+  price: number;
   amount: number;
 }
 
@@ -17,7 +17,7 @@ export interface IProductResponse {
 export interface iProductUpdateRequest {
   name?: string;
   description?: string;
-  price?: number | string;
+  price?: number;
   amount?: number;
   available?: boolean;
 }
