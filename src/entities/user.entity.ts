@@ -8,7 +8,6 @@ import {
   OneToOne,
   JoinColumn,
   OneToMany,
-  BeforeUpdate,
   BeforeInsert,
 } from "typeorm";
 import { hashSync } from "bcryptjs";
@@ -49,7 +48,6 @@ export class User {
   @Exclude()
   deletedAt: Date;
 
-  @BeforeUpdate()
   @BeforeInsert()
   hashPassword() {
     this.password = hashSync(this.password, 10);

@@ -1,19 +1,38 @@
 import AppDataSource from "../../data-source";
 import { Address } from "../../entities/address.entity";
+import { User } from "../../entities/user.entity";
+import {
+  IAddressUpdatedRequest,
+  IAddressUpdatedResponse,
+} from "../../interfaces/address.interfaces";
 
-const updatedAddressServices = async (idAddress, dataAddress) => {
+const updatedAddressServices = async (
+  idUser: string,
+  dataAddress: IAddressUpdatedRequest
+): Promise<IAddressUpdatedResponse> => {
   const addressRepository = AppDataSource.getRepository(Address);
+  const userRepository = AppDataSource.getRepository(User);
 
-  const address = await addressRepository.findOneBy({ id: idAddress });
-
-  const newAddress = addressRepository.create({
-    ...address,
-    ...dataAddress,
+  const userAdress = await userRepository.findOne({
+    where: {
+      id: idUser,
+    },
+    relations: {
+      address: true,
+    },
   });
 
-  await addressRepository.save(newAddress);
+  userAdress.address = {
+    ...userAdress.address,
+    ...dataAddress,
+  };
 
-  return newAddress;
+  await addressRepository.save(userAdress.address);
+
+  return {
+    ...userAdress.address,
+    ...dataAddress,
+  };
 };
 
 export default updatedAddressServices;

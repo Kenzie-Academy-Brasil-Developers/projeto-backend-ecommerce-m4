@@ -9,6 +9,10 @@ export const productExistsMiddlewere = async (
 ) => {
   const productId = Number(req.params.id)
 
+  if(!productId) {
+    return res.status(404).json({ message: "Product not found!"});
+  }
+
   const productsRepository = AppDataSource.getRepository(Products);
 
   const productExists = await productsRepository.findOneBy({ id: productId });
