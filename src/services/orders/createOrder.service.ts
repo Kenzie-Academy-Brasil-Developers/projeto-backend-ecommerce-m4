@@ -1,55 +1,45 @@
-import AppDataSource from "../../data-source";
 import { IEmailRequest } from "../../interfaces/email.interface";
-import { Orders } from "../../entities/orders.entity";
-import { OrdersProducts } from "../../entities/ordersProducts.entity";
-import { Products } from "../../entities/products.entity";
-import { User } from "../../entities/user.entity";
 import { sendEmail } from "../../utils/nodemailer.util";
+import {
+  usersRepository,
+  productsRepository,
+  ordersRepository,
+  ordersProductsRepository,
+} from "../../utils/repositories.ultil";
 
 const createOrderService = async (
   dataOrder: any,
   idUser: string
 ): Promise<{ message: string }> => {
-  const userRepository = AppDataSource.getRepository(User);
-  const orderRepository = AppDataSource.getRepository(Orders);
-  const orderProductsRepository = AppDataSource.getRepository(OrdersProducts);
-<<<<<<< HEAD
-=======
-  const productRepository = AppDataSource.getRepository(Products);
->>>>>>> 061a5f71cbd2c20acf6ee82dc5bff5534c17741b
+  
+  const user = await usersRepository.findOneBy({ id: idUser });
 
-  const user = await userRepository.findOneBy({ id: idUser });
-
-  const newOrder = orderRepository.create({
+  const newOrder = ordersRepository.create({
     ...dataOrder,
     user,
   });
 
-  const ordersCreated = await orderRepository.save(newOrder);
+  const ordersCreated = await ordersRepository.save(newOrder);
 
-<<<<<<< HEAD
-  dataOrder.forEach(async (product: any) => {
-=======
   dataOrder.forEach(async (products) => {
->>>>>>> 061a5f71cbd2c20acf6ee82dc5bff5534c17741b
-    const newOrdersProduct = orderProductsRepository.create({
+    const newOrdersProduct = ordersProductsRepository.create({
       ...products,
       orders: ordersCreated,
     });
 
-    await orderProductsRepository.save(newOrdersProduct);
+    await ordersProductsRepository.save(newOrdersProduct);
 
-    const findProduct = await productRepository.findOneBy({
+    const findProduct = await productsRepository.findOneBy({
       id: products.product,
     });
 
-    await productRepository.update(products.product, {
+    await productsRepository.update(products.product, {
       ...findProduct,
       amount: findProduct.amount - 1,
     });
 
     if (findProduct.amount === 0) {
-      await productRepository.update(findProduct.id, {
+      await productsRepository.update(findProduct.id, {
         ...findProduct,
         available: false,
       });

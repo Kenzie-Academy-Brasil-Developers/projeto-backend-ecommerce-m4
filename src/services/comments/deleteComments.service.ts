@@ -1,13 +1,11 @@
-import AppDataSource from "../../data-source";
-import { Comments } from "../../entities/comments.entity";
 import { AppError } from "../../errors/errors";
 import { IBodyUser } from "../../interfaces/users.interfaces";
+import {commentsRepository} from "../../utils/repositories.ultil"
 
 const deleteCommentsService = async (
   idComment: number,
   user: IBodyUser
 ): Promise<void> => {
-  const commentsRepository = AppDataSource.getRepository(Comments);
 
   const findUser = await commentsRepository.findOne({
     where: { id: idComment },

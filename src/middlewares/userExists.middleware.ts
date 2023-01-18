@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { User } from "../entities/user.entity";
-import AppDataSource from "../data-source";
+import {usersRepository} from "../utils/repositories.ultil"
 
 export const userExistsMiddlewere = async (
   req: Request,
@@ -9,9 +8,7 @@ export const userExistsMiddlewere = async (
 ) => {
   const userId = req.params.id;
 
-  const userRepository = AppDataSource.getRepository(User);
-
-  const userExists = await userRepository.findOneBy({ id: userId });
+  const userExists = await usersRepository.findOneBy({ id: userId });
 
   if (!userExists) {
     return res.status(404).json({ message: "User not found." });

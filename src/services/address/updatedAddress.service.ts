@@ -1,6 +1,4 @@
-import AppDataSource from "../../data-source";
-import { Address } from "../../entities/address.entity";
-import { User } from "../../entities/user.entity";
+import {usersRepository, addressRepository} from "../../utils/repositories.ultil"
 import {
   IAddressUpdatedRequest,
   IAddressUpdatedResponse,
@@ -10,10 +8,8 @@ const updatedAddressServices = async (
   idUser: string,
   dataAddress: IAddressUpdatedRequest
 ): Promise<IAddressUpdatedResponse> => {
-  const addressRepository = AppDataSource.getRepository(Address);
-  const userRepository = AppDataSource.getRepository(User);
-
-  const userAdress = await userRepository.findOne({
+  
+  const userAdress = await usersRepository.findOne({
     where: {
       id: idUser,
     },

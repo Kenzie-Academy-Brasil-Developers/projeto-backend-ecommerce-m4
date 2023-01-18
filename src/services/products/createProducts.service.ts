@@ -1,5 +1,4 @@
-import AppDataSource from "../../data-source";
-import { Products } from "../../entities/products.entity";
+import { productsRepository } from "../../utils/repositories.ultil";
 import { AppError } from "../../errors/errors";
 import {
   IProductRequest,
@@ -9,9 +8,8 @@ import {
 const createProductsServices = async (
   productData: IProductRequest
 ): Promise<IProductResponse> => {
-  const productRepository = AppDataSource.getRepository(Products);
-
-  const findProduct = await productRepository.findOneBy({
+  
+  const findProduct = await productsRepository.findOneBy({
     name: productData.name,
   });
 
@@ -19,9 +17,9 @@ const createProductsServices = async (
     throw new AppError("Product already exists", 409);
   }
 
-  const product = productRepository.create(productData);
+  const product = productsRepository.create(productData);
 
-  await productRepository.save(product);
+  await productsRepository.save(product);
 
   return product;
 };

@@ -1,14 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { Products } from "../entities/products.entity";
-import AppDataSource from "../data-source";
+import {productsRepository} from "../utils/repositories.ultil"
 
 const verifyProductCartMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const productsRepository = AppDataSource.getRepository(Products);
-  
 
   for (let i = 0; i < req.body.length; i++) {
     const order = await productsRepository.findOneBy({
