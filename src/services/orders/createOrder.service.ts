@@ -11,7 +11,6 @@ const createOrderService = async (
   dataOrder: any,
   idUser: string
 ): Promise<{ message: string }> => {
-  
   const user = await usersRepository.findOneBy({ id: idUser });
 
   const newOrder = ordersRepository.create({
@@ -19,8 +18,8 @@ const createOrderService = async (
     user,
   });
 
-  const ordersCreated = await ordersRepository.save(newOrder)
- 
+  const ordersCreated = await ordersRepository.save(newOrder);
+
   for (let i = 0; i < dataOrder.length; i++) {
     const product = dataOrder[i];
 
@@ -37,11 +36,9 @@ const createOrderService = async (
     });
 
     await productsRepository.update(product.product, {
-
       ...findProduct,
-      stock: findProduct.stock - 1,
+      stock: findProduct.stock - product.amount,
     });
-
 
     if (findProduct.stock === 0) {
       await productsRepository.update(findProduct.id, {
