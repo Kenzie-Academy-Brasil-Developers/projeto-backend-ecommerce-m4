@@ -14,6 +14,7 @@ import {
   productUpdateRequestSchema,
 } from "../schemas/products/products.schemas";
 import validatedBodyMiddleware from "../middlewares/validatedData.middleware";
+import { productIsAvailableMiddleware } from "../middlewares/productIsAvailable.middleware";
 
 const productRouter = Router();
 
@@ -27,7 +28,11 @@ productRouter.post(
 
 productRouter.get("", listProductController);
 
-productRouter.get("/:id", productExistsMiddlewere, getProductByIdController);
+productRouter.get(
+  "/:id",
+  productIsAvailableMiddleware,
+  getProductByIdController
+);
 
 productRouter.patch(
   "/:id",
@@ -41,7 +46,7 @@ productRouter.delete(
   "/:id",
   authTokenMiddleware,
   isAdmMiddlewere,
-  productExistsMiddlewere,
+  productIsAvailableMiddleware,
   deleteProductController
 );
 

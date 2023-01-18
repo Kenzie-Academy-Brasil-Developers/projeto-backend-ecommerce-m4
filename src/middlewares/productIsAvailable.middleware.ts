@@ -2,7 +2,7 @@ import { NextFunction, Response, Request } from "express";
 import { AppError } from "../errors/errors";
 import { productsRepository } from "../utils/repositories.ultil";
 
-export const productExistsMiddlewere = async (
+export const productIsAvailableMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -13,9 +13,13 @@ export const productExistsMiddlewere = async (
     return res.status(404).json({ message: "Product not found!" });
   }
 
-  const productExists = await productsRepository.findOneBy({ id: productId });
+  const product = await productsRepository
+    .createQueryBuilder("products")
+    .where("products.available = true")
+    .andWhere("products.id = :idProduct", { idProduct: productId })
+    .getOne();
 
-  if (!productExists) {
+  if (!product) {
     return res.status(404).json({ message: "Product not found!" });
   }
 
