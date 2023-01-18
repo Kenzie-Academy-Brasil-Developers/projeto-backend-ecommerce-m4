@@ -1,12 +1,6 @@
 import AppDataSource from "../../data-source";
 import request from "supertest";
 import app from "../../app";
-import { User } from "../../entities/user.entity";
-import { Products } from "../../entities/products.entity";
-import { Address } from "../../entities/address.entity";
-import { Orders } from "../../entities/orders.entity";
-import { Comments } from "../../entities/comments.entity";
-import { OrdersProducts } from "../../entities/ordersProducts.entity";
 import { DataSource } from "typeorm";
 import {
   mockedInvalidUserLogin,
@@ -32,8 +26,6 @@ import {
 export {
   AppDataSource,
   DataSource,
-  User,
-  Products,
   app,
   mockedInvalidIdNumber,
   mockedInvalidProductUpdateName,
@@ -53,9 +45,5 @@ export {
   mockedUserResponse,
   mockedUserUpdate,
   mockedInvalidField,
-  request,
-  Address,
-  Comments,
-  Orders,
-  OrdersProducts,
+  request
 };

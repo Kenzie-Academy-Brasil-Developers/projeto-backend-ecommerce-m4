@@ -1,14 +1,19 @@
 import { compare } from "bcryptjs";
-import jwt from "jsonwebtoken";
-import AppDataSource from "../../data-source";
-import { User } from "../../entities/user.entity";
+import { usersRepository } from "../../utils/repositories.ultil";
 import { AppError } from "../../errors/errors";
+import {
+  ISessionRequest,
+  ISessionResponse,
+} from "../../interfaces/session.interfaces";
+import jwt from "jsonwebtoken";
 import "dotenv/config";
 
-export const sessionService = async ({ email, password }) => {
-  const userRepository = AppDataSource.getRepository(User);
-
-  const user = await userRepository.findOneBy({ email: email });
+const sessionService = async ({
+  email,
+  password,
+}: ISessionRequest): Promise<ISessionResponse> => {
+  
+  const user = await usersRepository.findOneBy({ email: email });
 
   if (!user) {
     throw new AppError("Email or password invalid");
@@ -31,3 +36,5 @@ export const sessionService = async ({ email, password }) => {
 
   return { token: token };
 };
+
+export default sessionService

@@ -1,4 +1,3 @@
-import { Products } from "../../../entities/products.entity";
 import {
   mockedInvalidProductRequest,
   mockedProductRequest,
@@ -7,20 +6,18 @@ import {
 import {
   AppDataSource,
   DataSource,
-  User,
   app,
   mockedUserRequest,
   request,
   mockedAdminRequest,
   mockedAdminLogin,
 } from "../index";
+import {usersRepository, productsRepository} from "../../../utils/repositories.ultil"
 
 describe("/products", () => {
   let connection: DataSource;
   const baseUrl = "/products";
-  const userRepository = AppDataSource.getRepository(User);
-  const productRepository = AppDataSource.getRepository(Products);
-
+  
   beforeAll(async () => {
     await AppDataSource.initialize()
       .then(async (resp) => {
@@ -32,8 +29,8 @@ describe("/products", () => {
   });
 
   beforeEach(async () => {
-    await userRepository.createQueryBuilder().delete().execute();
-    await productRepository.createQueryBuilder().delete().execute();
+    await usersRepository.createQueryBuilder().delete().execute();
+    await productsRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -41,8 +38,8 @@ describe("/products", () => {
   });
 
   it("POST /products - should be able to create a product", async () => {
-    const admin = userRepository.create(mockedAdminRequest);
-    await userRepository.save(admin);
+    const admin = usersRepository.create(mockedAdminRequest);
+    await usersRepository.save(admin);
     const adminLoginResponse = await request(app)
       .post("/session")
       .send(mockedAdminLogin);
@@ -57,9 +54,9 @@ describe("/products", () => {
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("name");
     expect(response.body).toHaveProperty("price");
-    expect(response.body).toHaveProperty("amount");
+    expect(response.body).toHaveProperty("stock");
     expect(response.body).toHaveProperty("available");
-    const [product, amount] = await productRepository.findAndCountBy({
+    const [product, amount] = await productsRepository.findAndCountBy({
       id: response.body.id,
     });
     expect(amount).toBe(1);
@@ -73,8 +70,8 @@ describe("/products", () => {
     expect(response.body).toHaveProperty("message");
   });
   it("POST /products - should not be able to create a product without admin permission", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
@@ -89,8 +86,8 @@ describe("/products", () => {
     expect(response.body).toHaveProperty("message");
   });
   it("POST /products - should not be able to create a product with invalid data", async () => {
-    const admin = userRepository.create(mockedAdminRequest);
-    await userRepository.save(admin);
+    const admin = usersRepository.create(mockedAdminRequest);
+    await usersRepository.save(admin);
     const adminLoginResponse = await request(app)
       .post("/session")
       .send(mockedAdminLogin);
@@ -105,15 +102,15 @@ describe("/products", () => {
     expect(response.body).toHaveProperty("message");
   });
   it("POST /products - should not be able to create a product with a name that already exists", async () => {
-    const admin = userRepository.create(mockedAdminRequest);
-    await userRepository.save(admin);
+    const admin = usersRepository.create(mockedAdminRequest);
+    await usersRepository.save(admin);
     const adminLoginResponse = await request(app)
       .post("/session")
       .send(mockedAdminLogin);
     const adminToken = `Bearer ${adminLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app)
       .post(baseUrl)

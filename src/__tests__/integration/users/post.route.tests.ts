@@ -2,18 +2,17 @@ import { getRounds } from "bcryptjs";
 import {
   AppDataSource,
   DataSource,
-  User,
   app,
   mockedUserInvalidRequest,
   mockedUserRequest,
   request,
 } from "../index";
+import {usersRepository} from "../../../utils/repositories.ultil"
 
 describe("/users", () => {
   let connection: DataSource;
   const baseUrl = "/users";
-  const userRepository = AppDataSource.getRepository(User);
-
+  
   beforeAll(async () => {
     await AppDataSource.initialize()
       .then(async (resp) => {
@@ -25,7 +24,7 @@ describe("/users", () => {
   });
 
   beforeEach(async () => {
-    await userRepository.createQueryBuilder().delete().execute();
+    await usersRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -39,7 +38,7 @@ describe("/users", () => {
     expect(response.body).toHaveProperty("id");
     expect(response.body).not.toHaveProperty("password");
 
-    const [user, amount] = await userRepository.findAndCountBy({
+    const [user, amount] = await usersRepository.findAndCountBy({
       id: response.body.id,
     });
     expect(amount).toBe(1);
@@ -56,8 +55,8 @@ describe("/users", () => {
   });
 
   it("POST /users - should not be able to create an user that already exists", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
 
     const response = await request(app).post(baseUrl).send(mockedUserRequest);
 

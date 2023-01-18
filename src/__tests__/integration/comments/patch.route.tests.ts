@@ -1,8 +1,6 @@
 import {
   mockedCommentRequest,
   mockedCommentUpdateRequest,
-  mockedInvalidCommentRequest,
-  mockedInvalidCommentUpdateRequest,
   mockedInvalidIdNumber,
   mockedProductRequest,
   mockedUserLogin,
@@ -11,21 +9,20 @@ import {
 import {
   AppDataSource,
   DataSource,
-  User,
   app,
   mockedUserRequest,
-  request,
-  Products,
-  Comments,
+  request
 } from "../index";
+import {
+  usersRepository,
+  productsRepository,
+  commentsRepository,
+} from "../../../utils/repositories.ultil";
 
-describe("/products/:id/comments", () => {
+describe("/products/comments/:id", () => {
   let connection: DataSource;
   const baseUrl = "/products";
-  const userRepository = AppDataSource.getRepository(User);
-  const productRepository = AppDataSource.getRepository(Products);
-  const commentsRepository = AppDataSource.getRepository(Comments);
-
+  
   beforeAll(async () => {
     await AppDataSource.initialize()
       .then(async (resp) => {
@@ -38,24 +35,24 @@ describe("/products/:id/comments", () => {
 
   beforeEach(async () => {
     await commentsRepository.createQueryBuilder().delete().execute();
-    await productRepository.createQueryBuilder().delete().execute();
-    await userRepository.createQueryBuilder().delete().execute();
+    await productsRepository.createQueryBuilder().delete().execute();
+    await usersRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
     await connection.destroy();
   });
 
-  it("PATCH /products/:id/comments/:id - should be able to update a comment", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+  it("PATCH /products/comments/:id - should be able to update a comment", async () => {
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const comment = commentsRepository.create({
       ...mockedCommentRequest,
@@ -65,7 +62,7 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .patch(`${baseUrl}/${product.id}/comments/${comment.id}`)
+      .patch(`${baseUrl}/comments/${comment.id}`)
       .set("Authorization", userToken)
       .send(mockedCommentUpdateRequest);
 
@@ -75,12 +72,12 @@ describe("/products/:id/comments", () => {
     );
   });
 
-  it("PATCH /products/:id/comments/:id - should not be able to update a comment without authentication", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+  it("PATCH /products/comments/:id - should not be able to update a comment without authentication", async () => {
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const comment = commentsRepository.create({
       ...mockedCommentRequest,
@@ -90,23 +87,23 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .patch(`${baseUrl}/${product.id}/comments/${comment.id}`)
+      .patch(`${baseUrl}/comments/${comment.id}`)
       .send(mockedCommentUpdateRequest);
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty("message");
   });
 
-  it("PATCH /products/:id/comments/:id - should not be able to update a comment with invalid product id", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+  it("PATCH /products/comments/:id - should not be able to update a comment with invalid id", async () => {
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const comment = commentsRepository.create({
       ...mockedCommentRequest,
@@ -116,7 +113,7 @@ describe("/products/:id/comments", () => {
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .patch(`${baseUrl}/${mockedInvalidIdNumber}/comments/${comment.id}`)
+      .patch(`${baseUrl}/comments/${mockedInvalidIdNumber}`)
       .set("Authorization", userToken)
       .send(mockedCommentUpdateRequest);
 
@@ -124,30 +121,29 @@ describe("/products/:id/comments", () => {
     expect(response.body).toHaveProperty("message");
   });
 
-  it("POST /products/:id/comments/:id - should not be able to update another user comments", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+  it("PATCH /products/comments/:id - should not be able to update another user comments", async () => {
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const userOwnerOfCommentToBeUpdated =
-      userRepository.create(mockedUserRequest2);
-    await userRepository.save(userOwnerOfCommentToBeUpdated);
+    const userOwnerOfComment = usersRepository.create(mockedUserRequest2);
+    await usersRepository.save(userOwnerOfComment);
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const comment = commentsRepository.create({
       ...mockedCommentRequest,
       product,
-      user: userOwnerOfCommentToBeUpdated,
+      user: userOwnerOfComment,
     });
     await commentsRepository.save(comment);
 
     const response = await request(app)
-      .patch(`${baseUrl}/${product.id}/comments/${comment.id}`)
+      .patch(`${baseUrl}/comments/${comment.id}`)
       .set("Authorization", userToken)
       .send(mockedCommentUpdateRequest);
 

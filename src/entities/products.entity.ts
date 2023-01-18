@@ -17,7 +17,7 @@ export class Products {
   price: number;
 
   @Column()
-  amount: number;
+  stock: number;
 
   @Column({ default: true })
   available: boolean;

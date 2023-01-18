@@ -8,21 +8,20 @@ import {
 import {
   AppDataSource,
   DataSource,
-  User,
   app,
   mockedUserRequest,
-  request,
-  Products,
-  Comments,
+  request
 } from "../index";
+import {
+  usersRepository,
+  productsRepository,
+  commentsRepository,
+} from "../../../utils/repositories.ultil";
 
 describe("/products/:id/comments", () => {
   let connection: DataSource;
   const baseUrl = "/products";
-  const userRepository = AppDataSource.getRepository(User);
-  const productRepository = AppDataSource.getRepository(Products);
-  const commentsRepository = AppDataSource.getRepository(Comments);
-
+  
   beforeAll(async () => {
     await AppDataSource.initialize()
       .then(async (resp) => {
@@ -35,8 +34,8 @@ describe("/products/:id/comments", () => {
 
   beforeEach(async () => {
     await commentsRepository.createQueryBuilder().delete().execute();
-    await productRepository.createQueryBuilder().delete().execute();
-    await userRepository.createQueryBuilder().delete().execute();
+    await productsRepository.createQueryBuilder().delete().execute();
+    await usersRepository.createQueryBuilder().delete().execute();
   });
 
   afterAll(async () => {
@@ -44,16 +43,16 @@ describe("/products/:id/comments", () => {
   });
 
   it("POST /products/:id/comments - should be able to create a comment", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
 
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app)
       .post(`${baseUrl}/${product.id}/comments`)
@@ -72,16 +71,16 @@ describe("/products/:id/comments", () => {
   });
 
   it("POST /products/:id/comments - should be able to create a comment excluding additional invalid data", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
 
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
     const userToken = `Bearer ${userLoginResponse.body.token}`;
 
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app)
       .post(`${baseUrl}/${product.id}/comments`)
@@ -95,8 +94,8 @@ describe("/products/:id/comments", () => {
   });
 
   it("POST /products/:id/comments - should not be able to create a comment without authentication", async () => {
-    const product = productRepository.create(mockedProductRequest);
-    await productRepository.save(product);
+    const product = productsRepository.create(mockedProductRequest);
+    await productsRepository.save(product);
 
     const response = await request(app)
       .post(`${baseUrl}/${product.id}/comments`)
@@ -107,8 +106,8 @@ describe("/products/:id/comments", () => {
   });
 
   it("POST /products/:id/comments - should not be able to create a comment with invalid product id", async () => {
-    const user = userRepository.create(mockedUserRequest);
-    await userRepository.save(user);
+    const user = usersRepository.create(mockedUserRequest);
+    await usersRepository.save(user);
     const userLoginResponse = await request(app)
       .post("/session")
       .send(mockedUserLogin);
