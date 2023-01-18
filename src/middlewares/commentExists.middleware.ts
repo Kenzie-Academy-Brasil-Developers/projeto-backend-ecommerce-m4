@@ -1,6 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import { Comments } from "../entities/comments.entity";
-import AppDataSource from "../data-source";
+import {commentsRepository} from "../utils/repositories.ultil"
 
 export const commentExistsMiddlewere = async (
   req: Request,
@@ -12,8 +11,6 @@ export const commentExistsMiddlewere = async (
   if (!commentId) {
     return res.status(404).json({ message: "Comment not found!" });
   }
-
-  const commentsRepository = AppDataSource.getRepository(Comments);
 
   const commentExists = await commentsRepository.findOneBy({ id: commentId });
 

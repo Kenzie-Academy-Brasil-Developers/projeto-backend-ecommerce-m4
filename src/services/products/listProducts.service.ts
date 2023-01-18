@@ -1,9 +1,7 @@
-import AppDataSource from "../../data-source";
-import { Products } from "../../entities/products.entity";
+import { productsRepository } from "../../utils/repositories.ultil";
 import { IProductResponse } from "../../interfaces/products.interfaces";
 
 const listProductsServices = async (): Promise<IProductResponse[]> => {
-  const productRepository = AppDataSource.getRepository(Products);
 
   const products = await productRepository
     .createQueryBuilder("products")

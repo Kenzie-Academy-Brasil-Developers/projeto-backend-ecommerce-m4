@@ -1,15 +1,12 @@
-import AppDataSource from "../../data-source";
-import { Products } from "../../entities/products.entity";
+import { productsRepository } from "../../utils/repositories.ultil";
 
 const deleteProductService = async (idProduct: number): Promise<void> => {
 
-  const productRespository = AppDataSource.getRepository(Products);
+  const product = await productsRepository.findOneBy({ id: idProduct });
 
-  const product = await productRespository.findOneBy({ id: idProduct });
+  const returned = await productsRepository.update(idProduct, { ...product, available: false });
 
-  const returned = await productRespository.update(idProduct, { ...product, available: false });
-
-  const product2 = await productRespository.findOneBy({ id: idProduct });
+  const product2 = await productsRepository.findOneBy({ id: idProduct });
 
 };
 

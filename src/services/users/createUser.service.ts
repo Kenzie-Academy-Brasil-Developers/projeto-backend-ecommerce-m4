@@ -1,7 +1,5 @@
-import AppDataSource from "../../data-source";
 import { IEmailRequest } from "../../interfaces/email.interface";
-import { Address } from "../../entities/address.entity";
-import { User } from "../../entities/user.entity";
+import { usersRepository, addressRepository } from "../../utils/repositories.ultil";
 import { AppError } from "../../errors/errors";
 import { IDataUserRequest } from "../../interfaces/users.interfaces";
 import { sendEmail } from "../../utils/nodemailer.util";
@@ -10,10 +8,8 @@ const createUserService = async ({
   address,
   ...dataUser
 }: IDataUserRequest): Promise<IDataUserRequest> => {
-  const userRepository = AppDataSource.getRepository(User);
-  const addressRepository = AppDataSource.getRepository(Address);
-
-  const findUser = await userRepository.findOneBy({ email: dataUser.email });
+  
+  const findUser = await usersRepository.findOneBy({ email: dataUser.email });
 
   if (findUser) {
     throw new AppError("Email already exists", 409);
@@ -22,8 +18,8 @@ const createUserService = async ({
   const newAddress = addressRepository.create(address);
   await addressRepository.save(newAddress);
 
-  const user = userRepository.create({ ...dataUser, address: newAddress });
-  await userRepository.save(user);
+  const user = usersRepository.create({ ...dataUser, address: newAddress });
+  await usersRepository.save(user);
 
   try {
     const email: IEmailRequest = {

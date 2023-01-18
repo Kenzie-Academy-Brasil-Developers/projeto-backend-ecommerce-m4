@@ -1,7 +1,8 @@
-import AppDataSource from "../../data-source";
-import { Comments } from "../../entities/comments.entity";
-import { Products } from "../../entities/products.entity";
-import { User } from "../../entities/user.entity";
+import {
+  commentsRepository,
+  productsRepository,
+  usersRepository,
+} from "../../utils/repositories.ultil";
 import {
   ICommentsRequest,
   ICommentsResponse,
@@ -12,20 +13,17 @@ const createCommentsServices = async (
   commentProduct: ICommentsRequest,
   userId: string
 ): Promise<ICommentsResponse> => {
-  const commentRepository = AppDataSource.getRepository(Comments);
-  const userRepository = AppDataSource.getRepository(User);
-  const productsRepository = AppDataSource.getRepository(Products);
-
-  const user = await userRepository.findOneBy({ id: userId });
+  
+  const user = await usersRepository.findOneBy({ id: userId });
   const products = await productsRepository.findOneBy({ id: idProducts });
 
-  const comments = commentRepository.create({
+  const comments = commentsRepository.create({
     ...commentProduct,
     product: products,
     user: user,
   });
 
-  const newComments = await commentRepository.save(comments);
+  const newComments = await commentsRepository.save(comments);
 
   return newComments;
 };

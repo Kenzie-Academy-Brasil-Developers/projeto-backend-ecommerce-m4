@@ -1,12 +1,10 @@
-import AppDataSource from "../../data-source";
-import { User } from "../../entities/user.entity";
+import { usersRepository } from "../../utils/repositories.ultil";
 
 const deleteUserService = async (userToDelete: string): Promise<void> => {
-  const userRepository = AppDataSource.getRepository(User);
-  const user = await userRepository.findOneBy({ id: userToDelete });
+  const user = await usersRepository.findOneBy({ id: userToDelete });
 
-  await userRepository.softRemove(user);
-  userRepository.save(user);
+  await usersRepository.softRemove(user);
+  usersRepository.save(user);
 };
 
 export default deleteUserService;

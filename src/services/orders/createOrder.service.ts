@@ -1,47 +1,47 @@
-import AppDataSource from "../../data-source";
 import { IEmailRequest } from "../../interfaces/email.interface";
-import { Orders } from "../../entities/orders.entity";
-import { OrdersProducts } from "../../entities/ordersProducts.entity";
-import { Products } from "../../entities/products.entity";
-import { User } from "../../entities/user.entity";
 import { sendEmail } from "../../utils/nodemailer.util";
+import {
+  usersRepository,
+  productsRepository,
+  ordersRepository,
+  ordersProductsRepository,
+} from "../../utils/repositories.ultil";
 
 const createOrderService = async (
   dataOrder: any,
   idUser: string
 ): Promise<{ message: string }> => {
-  const userRepository = AppDataSource.getRepository(User);
-  const orderRepository = AppDataSource.getRepository(Orders);
-  const orderProductsRepository = AppDataSource.getRepository(OrdersProducts);
-  const productRepository = AppDataSource.getRepository(Products);
+  
+  const user = await usersRepository.findOneBy({ id: idUser });
 
-  const user = await userRepository.findOneBy({ id: idUser });
-
-  const newOrder = orderRepository.create({
+  const newOrder = ordersRepository.create({
     ...dataOrder,
     user,
   });
 
-  const ordersCreated = await orderRepository.save(newOrder);
-
+  const ordersCreated = await ordersRepository.save(newOrder)
+ 
   for (let i = 0; i < dataOrder.length; i++) {
     const product = dataOrder[i];
 
     const newOrdersProduct = orderProductsRepository.create({
       ...product,
+
       orders: ordersCreated,
     });
 
-    await orderProductsRepository.save(newOrdersProduct);
+    await ordersProductsRepository.save(newOrdersProduct);
 
     const findProduct = await productRepository.findOneBy({
       id: product.product,
     });
 
     await productRepository.update(product.product, {
+
       ...findProduct,
       stock: findProduct.stock - 1,
     });
+
 
     if (findProduct.stock === 0) {
       await productRepository.update(findProduct.id, {

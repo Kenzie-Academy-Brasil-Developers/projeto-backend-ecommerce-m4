@@ -1,6 +1,5 @@
-import AppDataSource from "../../data-source";
-import { Comments } from "../../entities/comments.entity";
 import { AppError } from "../../errors/errors";
+import {commentsRepository} from "../../utils/repositories.ultil"
 import {
   ICommentsRequest,
   ICommentsResponse,
@@ -11,9 +10,8 @@ const updatedCommentsServices = async (
   data: ICommentsRequest,
   idUser: string
 ): Promise<ICommentsResponse> => {
-  const commentRepository = AppDataSource.getRepository(Comments);
-
-  const findUser = await commentRepository.findOne({
+  
+  const findUser = await commentsRepository.findOne({
     where: { id: idComment },
     relations: { user: true },
   });
@@ -22,16 +20,16 @@ const updatedCommentsServices = async (
     throw new AppError("You can't update other user's comments.", 403);
   }
 
-  const comment = await commentRepository.findOneBy({
+  const comment = await commentsRepository.findOneBy({
     id: idComment,
   });
 
-  await commentRepository.update(idComment, {
+  await commentsRepository.update(idComment, {
     ...comment,
     comments_text: data.comments_text,
   });
 
-  const commentUpdated = await commentRepository.findOneBy({ id: idComment });
+  const commentUpdated = await commentsRepository.findOneBy({ id: idComment });
 
   return commentUpdated;
 };

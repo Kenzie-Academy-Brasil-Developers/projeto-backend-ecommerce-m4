@@ -1,5 +1,4 @@
-import AppDataSource from "../../data-source";
-import { Products } from "../../entities/products.entity";
+import { productsRepository } from "../../utils/repositories.ultil";
 import { AppError } from "../../errors/errors";
 import {
   IProductResponse,
@@ -10,12 +9,11 @@ const updateProductService = async (
   idProduct: number,
   data: iProductUpdateRequest
 ): Promise<IProductResponse> => {
-  const productRepository = AppDataSource.getRepository(Products);
-
-  const product = await productRepository.findOneBy({ id: idProduct });
+  
+  const product = await productsRepository.findOneBy({ id: idProduct });
 
   if (data.name) {
-    const findProduct = await productRepository.findOneBy({
+    const findProduct = await productsRepository.findOneBy({
       name: data.name,
     });
     if (findProduct && findProduct.id !== product.id) {
@@ -23,12 +21,12 @@ const updateProductService = async (
     }
   }
 
-  await productRepository.update(idProduct, {
+  await productsRepository.update(idProduct, {
     ...product,
     ...data,
   });
 
-  const productUpdated = await productRepository.findOneBy({ id: idProduct });
+  const productUpdated = await productsRepository.findOneBy({ id: idProduct });
 
   return productUpdated;
 };

@@ -1,9 +1,6 @@
-import AppDataSource from "../../data-source"
-import { Orders } from "../../entities/orders.entity"
+import { ordersRepository } from "../../utils/repositories.ultil"
 
 const listAllOrdersService = async () => {
-
-    const ordersRepository = AppDataSource.getRepository(Orders)
 
     const listOrders = await ordersRepository.find()
 

@@ -1,6 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import { Orders } from "../entities/orders.entity";
-import AppDataSource from "../data-source";
+import {ordersRepository} from "../utils/repositories.ultil"
 
 export const orderExistsMiddlewere = async (
   req: Request,
@@ -12,8 +11,6 @@ export const orderExistsMiddlewere = async (
   if(!orderId) {
     return res.status(404).json({ message: "Order not found!"});
   }
-
-  const ordersRepository = AppDataSource.getRepository(Orders);
 
   const orderExists = await ordersRepository.findOneBy({ id: orderId });
 

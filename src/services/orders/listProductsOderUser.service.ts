@@ -1,10 +1,8 @@
 import AppDataSource from "../../data-source"
-import { Orders } from "../../entities/orders.entity";
+import { ordersRepository } from "../../utils/repositories.ultil";
 
 const listProductsOrderUserService = async (idUser: string) => {
 
-    const ordersRepository = AppDataSource.getRepository(Orders)
-    
     const productsOrders = await ordersRepository.createQueryBuilder("orders")
     .innerJoinAndSelect("orders.ordersProducts", "orders_products")
     .innerJoinAndSelect("orders.user", "user")
