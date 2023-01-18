@@ -14,6 +14,16 @@ const upadateUserService = async (
     throw new AppError("User not found");
   }
 
+  if (dataUser.email) {
+    const findUser = await userRepository.findOneBy({
+      email: dataUser.email,
+    });
+
+    if (findUser && findUser.id !== user.id) {
+      throw new AppError("User already exists", 409);
+    }
+  }
+
   const updatedUser = { ...user, ...dataUser };
 
   if (dataUser.password) updatedUser.password = hashSync(dataUser.password, 10);
