@@ -1,5 +1,15 @@
 # 💻 Projeto-backend-ecommerce-m4
 
+#### :heavy_exclamation_mark: **URL:** https://projeto-m4-kidn.onrender.com/ :heavy_exclamation_mark: 
+
+**Conta de Admin:**
+````
+{
+  email: admin@admin.com 
+  password: 1234
+}
+
+````
 
 ## :closed_lock_with_key: Rota de Login
 
@@ -74,27 +84,27 @@ ________________________________________________________________________________
 
 🔵 **GET - /users**
 
-* Rota para listar todos os usuário.
+* Rota para listar todos os usuário. :heavy_exclamation_mark: **(Rota de admin)** 
 
 **Response:**
 ````
 [
-	{
-		"id": string,
-		"name": string,
-		"email": string,
-		"age": number,
-		"createdAt": date,
-		"updatedAt": date,
-		"address": {
-			"id": number,
-			"street": string,
-			"city": string,
-			"state": string,
-			"zipCode": string,
-			"number": string
-		}
-	}
+  {
+    "id": string,
+    "name": string,
+    "email": string,
+    "age": number,
+    "createdAt": date,
+    "updatedAt": date,
+    "address": {
+      "id": number,
+      "street": string,
+      "city": string,
+      "state": string,
+      "zipCode": string,
+      "number": string
+    }
+  }
 ]
 
 ````
@@ -102,33 +112,33 @@ ________________________________________________________________________________
 
 🔵 **GET - /users/id-User**
 
-* Rota para listar usuário específico. (**Rota para admin**)
+* Rota para listar usuário específico se for Admin. :heavy_exclamation_mark: **(para listar o próprio usuário não precisa ser admin)**
 
 **Response:**
  ````
 {
-		"id": string,
-		"name": string,
-		"email": string,
-		"age": number,
-		"createdAt": date,
-		"updatedAt": date,
-		"address": {
-			"id": number,
-			"street": string,
-			"city": string,
-			"state": string,
-			"zipCode": string,
-			"number": string
-		}
-	}
+  "id": string,
+  "name": string,
+  "email": string,
+  "age": number,
+  "createdAt": date,
+  "updatedAt": date,
+  "address": {
+    "id": number,
+    "street": string,
+    "city": string,
+    "state": string,
+    "zipCode": string,
+    "number": string
+   }
+}
 ````
 
 _______________________________________________________________________________________________________________________________________________________________________
 
 🟡 **PATCH - /user/id-user**
 
-* Rota para atualizar dados do usuário.
+* Rota para atualizar dados do usuário. :heavy_exclamation_mark: **(Só é permitido atualizar os próprios dados, mas se for admin, pode alterar os dados de qualquer usuário)**
 
 **Request:**
 ````
@@ -185,7 +195,7 @@ ________________________________________________________________________________
 
 🔴 **DELETE - /users/id-user**
 
-* Deleta usuário.
+* Deleta usuário. :heavy_exclamation_mark: **(Só é permitido excluir os próprios dados, mas se for admin, pode excluir qualquer usuário)**
 
 _______________________________________________________________________________________________________________________________________________________________________
 
@@ -194,7 +204,7 @@ ________________________________________________________________________________
 
 🟢 **POST - /products**
 
-*Registra produto
+*Registra produto **(Rota para admin)**
 
 **Request:**
 ````
@@ -202,7 +212,7 @@ ________________________________________________________________________________
   "name": string,
   "description": string,
   "price": number,
-  "amount": number,
+  "stock": number,
 }
 
 ````
@@ -214,7 +224,7 @@ ________________________________________________________________________________
   "name": string,
   "description": string,
   "price": number,
-  "amount": number,
+  "stock": number,
   "available": boolean
 }
 
@@ -235,7 +245,7 @@ ________________________________________________________________________________
      "name": string,
      "description": string,
      "price": number,
-     "amount": number,
+     "stock": number,
      "available": boolean
    }
 ]
@@ -255,7 +265,7 @@ ________________________________________________________________________________
   "name": string,
   "description": string,
   "price": number,
-  "amount": number,
+  "stock": number,
   "available": boolean
 }
 ````
@@ -264,7 +274,7 @@ ________________________________________________________________________________
 
 🟡 **PATCH - /product/id-Product** 
 
-*Atualiza um produto em específico
+*Atualiza um produto em específico :heavy_exclamation_mark: **(Rota para admin)**
 
 **Request:**
 ````
@@ -272,7 +282,7 @@ ________________________________________________________________________________
   "name"?: string,
   "description"?: string,
   "price"?: number,
-  "amount"?: number,
+  "stock"?: number,
   "available"/: boolean
 }
 
@@ -285,7 +295,7 @@ ________________________________________________________________________________
   "name": string,
   "description": string,
   "price": number,
-  "amount": number,
+  "stock": number,
   "available": boolean
 }
 
@@ -294,7 +304,7 @@ ________________________________________________________________________________
 
 🔴 **DELETE - /products/id-Product**
 
-*Deleta um produto.
+*Deleta um produto. :heavy_exclamation_mark: **(Rota para admin)**
 
 _______________________________________________________________________________________________________________________________________________________________________
 
@@ -435,23 +445,64 @@ ________________________________________________________________________________
 
 🔵 **GET - /orders**
 
-*  Lista todos os pedidos 
+*  Lista todos os pedidos :heavy_exclamation_mark: **(Rota para admin)**
 
-**Response:**
+**Response:** 
 ````
 [
-	{
-		"id": number,
-		"orderedAt": date,
-		"delivered": boolean
-	}
+  {
+    "id": number,
+    "orderedAt": date,
+    "delivered": boolean
+  }
 ]
 ````
 _______________________________________________________________________________________________________________________________________________________________________
 
+🔵 **GET - /orders/products/user**
+*  Lista todos os pedidios com os produtos do usuário logado
+
+**Response:**
+````
+[
+  {
+    "delivered": boolean,
+    "id": number,
+    "orderedAt": date,
+    "ordersProducts": [
+	{
+	  "id": number,
+	  "amount": number,
+	  "product": {
+	     "id": number,
+	     "name": string,
+	     "description": string,
+	     "price": string,
+	     "stock": number,
+	     "available": boolean
+	   }
+         },
+	 {
+          "id": number,
+	  "amount": number,
+	  "product": {
+	     "id": number,
+	     "name": string,
+	     "description": string,
+	     "price": string,
+	     "stock": number,
+	     "available": boolean
+            } 
+	  }
+        ]
+   ]
+````
+
+_______________________________________________________________________________________________________________________________________________________________________
+
 🔵 **GET - /orders/id-order**
 
-*  Lista todos os produtos de um pedido 
+*  Lista todos os produtos de um pedido :heavy_exclamation_mark: **(Rota para admin)**
 
 **Response:**
 ````
@@ -495,7 +546,7 @@ ________________________________________________________________________________
 
 🟡 **PATCH - /orders/order-Id**
 
-* Atualizar um pedido específico
+* Atualizar um pedido específico :heavy_exclamation_mark: **(Rota para admin)**
 
 **Response:**
 ````
